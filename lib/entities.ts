@@ -1,4 +1,5 @@
 import { AxiosInstance } from "axios";
+import qs from 'qs';
 
 interface GenericAttribute {
 	[key: string]: any;
@@ -122,22 +123,38 @@ export class StrapiType<T> {
 		return baseEntity as T;
 	}
 
-	private getPopulateString(): string {
-		return this.childEntities ? `populate=${this.childEntities.join(",")}` : "";
+	private getPopulates(): object {
+		return this.childEntities ? { populate: this.childEntities.join(",") } : {};
+	}
+
+	private getFilter(fieldName: string, value: string): object {
+		return { [`filters\[${fieldName}\]`]: value };
 	}
 
 	public async getAll(): Promise<T[]> {
-		const response = await this.client.get(
-			`${this.path}?${this.getPopulateString()}`,
-		);
+		const response = await this.client.get(this.path, {params: this.getPopulates()});
 		const data = response.data.data as GenericStrapiEntity[];
 		return data.map((entry) => this.unpackEntity(entry));
 	}
 
+	public async findOneBy(fieldName: string, value: string): Promise<T> {
+		const response = await this.client.get(this.path, {
+			params: {
+				...this.getPopulates(),
+				...this.getFilter(fieldName, value),
+			},
+			paramsSerializer: (params) => {
+				return qs.stringify(params, { encode: false });
+			}
+		});
+		const data = response.data.data[0] as GenericStrapiEntity;
+		return this.unpackEntity(data) as T;
+	}
+
 	public async get(id: number): Promise<T> {
-		const response = await this.client.get(
-			`${this.path}/${id}?${this.getPopulateString()}`,
-		);
+		const response = await this.client.get(`${this.path}/${id}`, {
+			params: this.getPopulates(),
+		});
 		const data = response.data.data as GenericStrapiEntity;
 		return this.unpackEntity(data) as T;
 	}

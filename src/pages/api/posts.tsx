@@ -32,6 +32,9 @@ export default async function handler(
 		if (req.query.id) {
 			return res.status(200).json(await postEntity.get(req.query.id));
 		}
+		if (req.query.slug){
+			return res.status(200).json(await postEntity.findOneBy("slug", req.query.slug));
+		}
 		return res.status(200).json(await postEntity.getAll());
 	}
 }
