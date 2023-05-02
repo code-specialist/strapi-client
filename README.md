@@ -1,38 +1,96 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Introduction
 
-## Getting Started
+This is a sample project to demonstrate the use of a imaginary strap client package. The package currently offers two methods `getAll` and `get(id)`. It queries data and unpacks and
+partially flattens the data structure e.g.:
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+```json
+{
+    "data": {
+        "id": "1",
+        "attributes": {
+            "name": "John Doe",
+            "email": "John@doedel.com",
+            "image": {
+                "data": {
+                    ...
+                }
+            }
+        },
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "updatedAt": "2020-01-01T00:00:00.000Z",
+        "publishedAt": "2020-01-01T00:00:00.000Z"
+    }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+is unpacked to 
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```json
+{
+    "id": "1",
+    "type": "user",
+    "name": "John Doe",
+    "email": "John@doedel.com",
+    "image": {
+        ...
+        },
+    "createdAt": "2020-01-01T00:00:00.000Z",
+    "updatedAt": "2020-01-01T00:00:00.000Z",
+    "publishedAt": "2020-01-01T00:00:00.000Z"
+    },
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+The major advantage is, that you only have to define a few lines of code to get a full-blown proxy for the strapi endpoints:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```ts
+import { strapiClient } from "@/strapiLib/strapiClient";
+import {
+	StrapiBaseDataType,
+	StrapiBaseImageType,
+	StrapiType,
+} from "@/strapiLib/entities";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { IAuthor } from "./authors";
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+export interface IPost extends StrapiBaseDataType {
+	title: string;
+	slug: string;
+	content: string;
+	publishDate: string;
+	excerpt: string;
+	image?: StrapiBaseImageType;
+	author: IAuthor;
+}
 
-## Learn More
+export class PostEntity extends StrapiType<IPost> {
+	constructor() {
+		super("posts", strapiClient, ["image", "author", "author.image"]);
+	}
+}
 
-To learn more about Next.js, take a look at the following resources:
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse,
+) {
+	const postEntity = new PostEntity();
+	if (req.method === "GET") {
+		if (req.query.id) {
+			return res.status(200).json(await postEntity.get(req.query.id));
+		}
+		return res.status(200).json(await postEntity.getAll());
+	}
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+npm i
+```
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+npm run dev
+```

@@ -47,40 +47,43 @@ export interface StrapiBaseImageType {
 	updatedAt: Date;
 }
 
-interface GenericStrapiData {
-	data: GenericStrapiEntity;
-}
-
 interface GenericStrapiEntity {
 	id: number;
 	attributes: GenericAttribute[];
 }
 
+interface GenericStrapiData {
+	data: GenericStrapiEntity;
+}
+
+type ChildEntity<T> = keyof T & string;
+
 export class StrapiType<T> {
 	constructor(
-		public path: string,
-		private client: AxiosInstance,
-		public childEntities?: string[],
-	) {
-		this.childEntities = childEntities;
-	}
+		private readonly path: string,
+		private readonly client: AxiosInstance,
+		private readonly childEntities?: ChildEntity<T>[],
+	) {}
 
-	private spreadEntity(entity: GenericStrapiEntity) {
+	private spreadEntity(entity: GenericStrapiEntity): T | null {
 		if (!entity) {
 			return null;
 		}
-		return { id: entity.id, ...entity.attributes };
+
+		const result = { id: entity.id, ...entity.attributes } as T;
+		return result;
 	}
 
-	private spreadChildEntity(entity: GenericStrapiData) {
+	private spreadChildEntity(entity: GenericStrapiData): T | null {
 		if (!entity?.data) {
 			return null;
 		}
-		return { id: entity.data.id, ...entity.data.attributes };
+
+		const result = { id: entity.data.id, ...entity.data.attributes } as T;
+		return result;
 	}
 
-	// TODO: Fix types
-	private setObjectValue(obj: object, path: string, value: any) {
+	private setObjectValue(obj: any, path: string, value: any) {
 		const pathArray = path.split(".");
 		let currentObj = obj;
 
@@ -95,20 +98,18 @@ export class StrapiType<T> {
 		currentObj[pathArray[pathArray.length - 1]] = value;
 	}
 
-	//TODO: Fix types
-	private unpackEntity(entity: GenericStrapiEntity) {
+	private unpackEntity(entity: GenericStrapiEntity): T {
 		const baseEntity = this.spreadEntity(entity);
-		// spread each child entity into the base entity
+
 		if (!this.childEntities) {
-			return baseEntity;
+			return baseEntity as T;
 		}
 
-		this.childEntities.forEach((childEntity: string) => {
+		this.childEntities.forEach((childEntity) => {
 			const path = childEntity.split(".");
 
 			path.forEach((child, depth) => {
 				let targetValue = baseEntity;
-				// Iterate downwards to the target value
 				for (const key of path.splice(depth)) {
 					targetValue = targetValue[key];
 				}
@@ -117,22 +118,27 @@ export class StrapiType<T> {
 				this.setObjectValue(baseEntity, childEntity, content);
 			});
 		});
-		return baseEntity;
+
+		return baseEntity as T;
 	}
 
-	private getPopulateString() {
+	private getPopulateString(): string {
 		return this.childEntities ? `populate=${this.childEntities.join(",")}` : "";
 	}
 
-	public async find(): Promise<T[]> {
+	public async getAll(): Promise<T[]> {
 		const response = await this.client.get(
 			`${this.path}?${this.getPopulateString()}`,
 		);
 		const data = response.data.data as GenericStrapiEntity[];
-		return data.map((entry) => this.unpackEntity(entry)) as T[];
+		return data.map((entry) => this.unpackEntity(entry));
 	}
 
-	public async get(id: number) {
-		// TODO: implement
+	public async get(id: number): Promise<T> {
+		const response = await this.client.get(
+			`${this.path}/${id}?${this.getPopulateString()}`,
+		);
+		const data = response.data.data as GenericStrapiEntity;
+		return this.unpackEntity(data) as T;
 	}
 }

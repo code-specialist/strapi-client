@@ -1,17 +1,20 @@
-
 import { strapiClient } from "@/strapiLib/strapiClient";
-import { StrapiBaseDataType, StrapiBaseImageType, StrapiType } from "@/strapiLib/entities";
+import {
+	StrapiBaseDataType,
+	StrapiBaseImageType,
+	StrapiType,
+} from "@/strapiLib/entities";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { IAuthor } from "./authors";
 
 export interface IPost extends StrapiBaseDataType {
-	title: string
-    slug: string
-	content: string
-	publishDate: string
-	excerpt: string
-	image?: StrapiBaseImageType
-	author: IAuthor
+	title: string;
+	slug: string;
+	content: string;
+	publishDate: string;
+	excerpt: string;
+	image?: StrapiBaseImageType;
+	author: IAuthor;
 }
 
 export class PostEntity extends StrapiType<IPost> {
@@ -25,5 +28,10 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	const postEntity = new PostEntity();
-	res.status(200).json(await postEntity.find());
+	if (req.method === "GET") {
+		if (req.query.id) {
+			return res.status(200).json(await postEntity.get(req.query.id));
+		}
+		return res.status(200).json(await postEntity.getAll());
+	}
 }

@@ -1,17 +1,20 @@
-
 import { strapiClient } from "@/strapiLib/strapiClient";
-import { StrapiBaseDataType, StrapiBaseImageType, StrapiType } from "@/strapiLib/entities";
+import {
+	StrapiBaseDataType,
+	StrapiBaseImageType,
+	StrapiType,
+} from "@/strapiLib/entities";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export interface IAuthor extends StrapiBaseDataType {
 	name: string;
-    slug: string;
+	slug: string;
 	image: StrapiBaseImageType;
 }
 
 export class AuthorEntity extends StrapiType<IAuthor> {
 	constructor() {
-		super("authors", strapiClient);
+		super("authors", strapiClient, ["image"]);
 	}
 }
 
@@ -19,6 +22,11 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse,
 ) {
-	const authorEntity = new AuthorEntity();
-	res.status(200).json(await authorEntity.find());
+	if (req.method === "GET") {
+		const authorEntity = new AuthorEntity();
+		if (req.query.id) {
+			return res.status(200).json(await authorEntity.get(req.query.id));
+		}
+		return res.status(200).json(await authorEntity.getAll());
+	}
 }
