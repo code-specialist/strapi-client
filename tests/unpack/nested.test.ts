@@ -104,7 +104,6 @@ describe("StrapiEntity.unpackEntity", () => {
 
 	it("should be able to unpack a nested datastructure successfully", async () => {
 		const result = await strapiEntity["unpackEntity"](input);
-        console.log(result)
 		expect(result).toEqual(expectedOutput);
 	});
 });

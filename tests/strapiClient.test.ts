@@ -5,11 +5,16 @@ describe("createStrapiClient", () => {
 	const baseUrl = "https://example.com";
 	const apiKey = "secret-key";
 
-	it("creates an axios instance with the correct base URL and authorization header", () => {
+	it("creates an axios instance with the correct authorization header", () => {
+		const client = createStrapiClient({ baseUrl, apiKey });
+        
+		expect(client.defaults.headers.Authorization).toEqual(`Bearer ${apiKey}`);
+	});	
+    
+    it("creates an axios instance with the correct base URL", () => {
 		const client = createStrapiClient({ baseUrl, apiKey });
 
 		expect(client.defaults.baseURL).toEqual(`${baseUrl}/api`);
-		expect(client.defaults.headers.Authorization).toEqual(`Bearer ${apiKey}`);
 	});
 
 	it("creates an axios instance with the provided timeout value", () => {
