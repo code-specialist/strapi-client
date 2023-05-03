@@ -1,51 +1,8 @@
 import { AxiosInstance } from "axios";
-import qs from 'qs';
+import { strapiClient } from "./strapiClient";
 
 interface GenericAttribute {
 	[key: string]: any;
-}
-
-export interface StrapiBaseDataType {
-	id: number;
-	createdAt: Date;
-	updatedAt: Date;
-	publishedAt: Date;
-}
-
-interface ImageFormat {
-	ext: string;
-	url: string;
-	hash: string;
-	mime: string;
-	name: string;
-	path?: string;
-	size: number;
-	width: number;
-	height: number;
-}
-
-export interface StrapiBaseImageType {
-	name: string;
-	alternativeText?: string;
-	caption?: string;
-	width: number;
-	height: number;
-	formats: {
-		thumbnail?: ImageFormat;
-		small?: ImageFormat;
-		medium?: ImageFormat;
-		large?: ImageFormat;
-	};
-	hash: string;
-	ext: string;
-	mime: string;
-	size: number;
-	url: string;
-	previewUrl?: string;
-	provider: string;
-	provider_metadata?: string;
-	createdAt: Date;
-	updatedAt: Date;
 }
 
 interface GenericStrapiEntity {
@@ -57,13 +14,11 @@ interface GenericStrapiData {
 	data: GenericStrapiEntity;
 }
 
-type ChildEntity<T> = keyof T & string;
-
 export class StrapiType<T> {
 	constructor(
 		private readonly path: string,
-		private readonly client: AxiosInstance,
-		private readonly childEntities?: ChildEntity<T>[],
+		private readonly client: AxiosInstance = strapiClient,
+		private readonly childEntities?: string[],
 	) {}
 
 	private spreadEntity(entity: GenericStrapiEntity): T | null {
@@ -84,9 +39,9 @@ export class StrapiType<T> {
 		return result;
 	}
 
-	private setObjectValue(obj: any, path: string, value: any) {
+	private setObjectValue(object: any, path: string, value: any) {
 		const pathArray = path.split(".");
-		let currentObj = obj;
+		let currentObj = object;
 
 		for (let i = 0; i < pathArray.length - 1; i++) {
 			const key = pathArray[i];
@@ -95,7 +50,6 @@ export class StrapiType<T> {
 			}
 			currentObj = currentObj[key];
 		}
-
 		currentObj[pathArray[pathArray.length - 1]] = value;
 	}
 
@@ -109,12 +63,16 @@ export class StrapiType<T> {
 		this.childEntities.forEach((childEntity) => {
 			const path = childEntity.split(".");
 
-			path.forEach((child, depth) => {
+			path.forEach((pathPart, depth) => {
 				let targetValue = baseEntity;
 				for (const key of path.splice(depth)) {
+					if (!targetValue) {
+						throw new Error(`Invalid path ${childEntity}`);
+					}
+					// @ts-ignore TODO: fix this
 					targetValue = targetValue[key];
 				}
-
+				// @ts-ignore TODO: fix this
 				const content = this.spreadChildEntity(targetValue);
 				this.setObjectValue(baseEntity, childEntity, content);
 			});
@@ -131,24 +89,36 @@ export class StrapiType<T> {
 		return { [`filters\[${fieldName}\]`]: value };
 	}
 
-	public async getAll(): Promise<T[]> {
-		const response = await this.client.get(this.path, {params: this.getPopulates()});
-		const data = response.data.data as GenericStrapiEntity[];
-		return data.map((entry) => this.unpackEntity(entry));
-	}
-
-	public async findOneBy(fieldName: string, value: string): Promise<T> {
+	private async find(
+		fieldName: string,
+		value: string,
+	): Promise<GenericStrapiEntity[]> {
 		const response = await this.client.get(this.path, {
 			params: {
 				...this.getPopulates(),
 				...this.getFilter(fieldName, value),
 			},
-			paramsSerializer: (params) => {
-				return qs.stringify(params, { encode: false });
-			}
 		});
-		const data = response.data.data[0] as GenericStrapiEntity;
-		return this.unpackEntity(data) as T;
+		return response.data.data;
+	}
+
+	public async getAll(): Promise<T[]> {
+		const response = await this.client.get(this.path, {
+			params: this.getPopulates(),
+		});
+		const data = response.data.data as GenericStrapiEntity[];
+		return data.map((entry) => this.unpackEntity(entry));
+	}
+
+	public async findOneBy(fieldName: string, value: string): Promise<T> {
+		const data = await this.find(fieldName, value);
+		const entity = data[0] as GenericStrapiEntity;
+		return this.unpackEntity(entity) as T;
+	}
+
+	public async findAllBy(fieldName: string, value: string): Promise<T[]> {
+		const data = await this.find(fieldName, value);
+		return data.map((entry) => this.unpackEntity(entry));
 	}
 
 	public async get(id: number): Promise<T> {

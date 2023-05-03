@@ -1,5 +1,5 @@
-import { config } from "@/strapiLib/config";
 import axios from "axios";
+import { config } from "./config";
 
 if (!config.endpoint) {
 	throw new Error("STRAPI_ENDPOINT is not defined");
