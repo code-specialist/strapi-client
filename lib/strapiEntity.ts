@@ -46,16 +46,16 @@ export class StrapiEntity<T> {
 
 	private spreadChildList({ data }: { data: any[] }) {
 		return data.map((entity) => {
-			return { id: entity.id, ...entity.attributes } as T;
+			return { id: entity.id, ...entity.attributes };
 		});
 	}
 
-	private spreadChildEntity(entity: GenericStrapiData): T | null {
+	private spreadChildEntity(entity: GenericStrapiData) {
 		if (!entity?.data) {
 			return null;
 		}
 
-		return { id: entity.data.id, ...entity.data.attributes } as T;
+		return { id: entity.data.id, ...entity.data.attributes };
 	}
 
 	private setObjectValue(object: any, path: string, value: any) {
