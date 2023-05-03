@@ -1,5 +1,5 @@
-import { AxiosInstance } from "axios";
-import { strapiClient } from "./strapiClient";
+import { AxiosInstance } from 'axios';
+import { strapiClient } from './strapiClient';
 
 interface GenericAttribute {
 	[key: string]: any;
@@ -14,11 +14,11 @@ interface GenericStrapiData {
 	data: GenericStrapiEntity;
 }
 
-export class StrapiType<T> {
+export class StrapiEntity<T> {
 	constructor(
 		private readonly path: string,
-		private readonly client: AxiosInstance = strapiClient,
 		private readonly childEntities?: string[],
+		private readonly client: AxiosInstance = strapiClient,
 	) {}
 
 	private spreadEntity(entity: GenericStrapiEntity): T | null {

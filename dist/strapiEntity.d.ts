@@ -1,9 +1,9 @@
-import { AxiosInstance } from "axios";
-export declare class StrapiType<T> {
+import { AxiosInstance } from 'axios';
+export declare class StrapiEntity<T> {
     private readonly path;
-    private readonly client;
     private readonly childEntities?;
-    constructor(path: string, client?: AxiosInstance, childEntities?: string[] | undefined);
+    private readonly client;
+    constructor(path: string, childEntities?: string[] | undefined, client?: AxiosInstance);
     private spreadEntity;
     private spreadChildEntity;
     private setObjectValue;

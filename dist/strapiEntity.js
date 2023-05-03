@@ -47,30 +47,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StrapiType = void 0;
+exports.StrapiEntity = void 0;
 var strapiClient_1 = require("./strapiClient");
-var StrapiType = /** @class */ (function () {
-    function StrapiType(path, client, childEntities) {
+var StrapiEntity = /** @class */ (function () {
+    function StrapiEntity(path, childEntities, client) {
         if (client === void 0) { client = strapiClient_1.strapiClient; }
         this.path = path;
-        this.client = client;
         this.childEntities = childEntities;
+        this.client = client;
     }
-    StrapiType.prototype.spreadEntity = function (entity) {
+    StrapiEntity.prototype.spreadEntity = function (entity) {
         if (!entity) {
             return null;
         }
         var result = __assign({ id: entity.id }, entity.attributes);
         return result;
     };
-    StrapiType.prototype.spreadChildEntity = function (entity) {
+    StrapiEntity.prototype.spreadChildEntity = function (entity) {
         if (!(entity === null || entity === void 0 ? void 0 : entity.data)) {
             return null;
         }
         var result = __assign({ id: entity.data.id }, entity.data.attributes);
         return result;
     };
-    StrapiType.prototype.setObjectValue = function (object, path, value) {
+    StrapiEntity.prototype.setObjectValue = function (object, path, value) {
         var pathArray = path.split(".");
         var currentObj = object;
         for (var i = 0; i < pathArray.length - 1; i++) {
@@ -82,7 +82,7 @@ var StrapiType = /** @class */ (function () {
         }
         currentObj[pathArray[pathArray.length - 1]] = value;
     };
-    StrapiType.prototype.unpackEntity = function (entity) {
+    StrapiEntity.prototype.unpackEntity = function (entity) {
         var _this = this;
         var baseEntity = this.spreadEntity(entity);
         if (!this.childEntities) {
@@ -107,14 +107,14 @@ var StrapiType = /** @class */ (function () {
         });
         return baseEntity;
     };
-    StrapiType.prototype.getPopulates = function () {
+    StrapiEntity.prototype.getPopulates = function () {
         return this.childEntities ? { populate: this.childEntities.join(",") } : {};
     };
-    StrapiType.prototype.getFilter = function (fieldName, value) {
+    StrapiEntity.prototype.getFilter = function (fieldName, value) {
         var _a;
         return _a = {}, _a["filters[".concat(fieldName, "]")] = value, _a;
     };
-    StrapiType.prototype.find = function (fieldName, value) {
+    StrapiEntity.prototype.find = function (fieldName, value) {
         return __awaiter(this, void 0, void 0, function () {
             var response;
             return __generator(this, function (_a) {
@@ -129,7 +129,7 @@ var StrapiType = /** @class */ (function () {
             });
         });
     };
-    StrapiType.prototype.getAll = function () {
+    StrapiEntity.prototype.getAll = function () {
         return __awaiter(this, void 0, void 0, function () {
             var response, data;
             var _this = this;
@@ -146,7 +146,7 @@ var StrapiType = /** @class */ (function () {
             });
         });
     };
-    StrapiType.prototype.findOneBy = function (fieldName, value) {
+    StrapiEntity.prototype.findOneBy = function (fieldName, value) {
         return __awaiter(this, void 0, void 0, function () {
             var data, entity;
             return __generator(this, function (_a) {
@@ -160,7 +160,7 @@ var StrapiType = /** @class */ (function () {
             });
         });
     };
-    StrapiType.prototype.findAllBy = function (fieldName, value) {
+    StrapiEntity.prototype.findAllBy = function (fieldName, value) {
         return __awaiter(this, void 0, void 0, function () {
             var data;
             var _this = this;
@@ -174,7 +174,7 @@ var StrapiType = /** @class */ (function () {
             });
         });
     };
-    StrapiType.prototype.get = function (id) {
+    StrapiEntity.prototype.get = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var response, data;
             return __generator(this, function (_a) {
@@ -190,6 +190,6 @@ var StrapiType = /** @class */ (function () {
             });
         });
     };
-    return StrapiType;
+    return StrapiEntity;
 }());
-exports.StrapiType = StrapiType;
+exports.StrapiEntity = StrapiEntity;

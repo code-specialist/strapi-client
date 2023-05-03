@@ -1,7 +1,7 @@
 import axios from "axios";
 import { config } from "./config";
 
-if (!config.endpoint) {
+if (!config.base_url) {
 	throw new Error("STRAPI_ENDPOINT is not defined");
 }
 if (!config.apiKey) {
@@ -9,7 +9,7 @@ if (!config.apiKey) {
 }
 
 export const strapiClient = axios.create({
-	baseURL: `${config.endpoint}/api`,
+	baseURL: `${config.base_url}/api`,
 	timeout: config.timeout,
 	headers: {
 		Authorization: `Bearer ${config.apiKey}`,

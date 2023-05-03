@@ -1,5 +1,5 @@
 export declare const config: {
-    endpoint: string | undefined;
+    base_url: string | undefined;
     apiKey: string | undefined;
     timeout: number;
 };
