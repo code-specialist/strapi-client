@@ -2,7 +2,7 @@ import { AxiosInstance } from "axios";
 
 interface GenericStrapiEntity {
 	id: number;
-	attributes: any[];
+	attributes: object;
 }
 
 interface GenericStrapiData {
@@ -29,10 +29,8 @@ export class StrapiEntity<T> {
 	private readonly path: string;
 	private readonly childEntities?: string[];
 
-	constructor(
-		strapiEntity: IStrapiEntity,
-	) {
-		this.client= strapiEntity.client;
+	constructor(strapiEntity: IStrapiEntity) {
+		this.client = strapiEntity.client;
 		this.path = strapiEntity.path;
 		this.childEntities = strapiEntity.childEntities;
 	}
@@ -46,13 +44,18 @@ export class StrapiEntity<T> {
 		return result;
 	}
 
+	private spreadChildList({ data }: { data: any[] }) {
+		return data.map((entity) => {
+			return { id: entity.id, ...entity.attributes } as T;
+		});
+	}
+
 	private spreadChildEntity(entity: GenericStrapiData): T | null {
 		if (!entity?.data) {
 			return null;
 		}
 
-		const result = { id: entity.data.id, ...entity.data.attributes } as T;
-		return result;
+		return { id: entity.data.id, ...entity.data.attributes } as T;
 	}
 
 	private setObjectValue(object: any, path: string, value: any) {
@@ -88,8 +91,16 @@ export class StrapiEntity<T> {
 					// @ts-ignore TODO: fix this
 					targetValue = targetValue[key];
 				}
+				// check if the target value is a list
+				let content;
 				// @ts-ignore TODO: fix this
-				const content = this.spreadChildEntity(targetValue);
+				if (Array.isArray(targetValue.data)) {
+					// @ts-ignore TODO: fix this
+					content = this.spreadChildList(targetValue);
+				} else {
+					// @ts-ignore TODO: fix this
+					content = this.spreadChildEntity(targetValue);
+				}
 				this.setObjectValue(baseEntity, childEntity, content);
 			});
 		});
@@ -103,7 +114,7 @@ export class StrapiEntity<T> {
 
 	private getFilter(fieldName: string, value: string): object {
 		const path = fieldName.split(".");
-		const fieldPath = path.map(layer => `\[${layer}\]`).join("")
+		const fieldPath = path.map((layer) => `\[${layer}\]`).join("");
 		return { [`filters${fieldPath}`]: value };
 	}
 
