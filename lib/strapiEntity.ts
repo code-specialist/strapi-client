@@ -106,7 +106,9 @@ export class StrapiEntity<T> {
 	}
 
 	private getFilter(fieldName: string, value: string): object {
-		return { [`filters\[${fieldName}\]`]: value };
+		const path = fieldName.split(".");
+		const fieldPath = path.map(layer => `\[${layer}\]`);
+		return { [`filters${fieldPath}`]: value };
 	}
 
 	private async find(
