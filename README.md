@@ -53,10 +53,10 @@ TODO:
 
 4. Use the instance to fetch data from Strapi
     ```ts
-    const post: IPost = await postEntity.find("slug", "dry");
+    const post: IPost = await postEntity.find("slug", "dry"); // Should be a unique field. However always the first result is returned
     const posts: IPost[] = await postEntity.findAll("category", "python");
     const posts: IPost[] = await postEntity.getAll();
-    const post: IPost  = await postEntity.get(id: 1);
+    const post: IPost  = await postEntity.get(1); // ID
     ```
 
 ### Environment Variables
