@@ -1,12 +1,8 @@
 import { AxiosInstance } from "axios";
 
-interface GenericAttribute {
-	[key: string]: any;
-}
-
 interface GenericStrapiEntity {
 	id: number;
-	attributes: GenericAttribute[];
+	attributes: any[];
 }
 
 interface GenericStrapiData {
@@ -107,7 +103,7 @@ export class StrapiEntity<T> {
 
 	private getFilter(fieldName: string, value: string): object {
 		const path = fieldName.split(".");
-		const fieldPath = path.map(layer => `\[${layer}\]`);
+		const fieldPath = path.map(layer => `\[${layer}\]`).join("")
 		return { [`filters${fieldPath}`]: value };
 	}
 
