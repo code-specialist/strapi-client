@@ -16,3 +16,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./strapiTypes"), exports);
 __exportStar(require("./strapiEntity"), exports);
+__exportStar(require("./strapiClient"), exports);

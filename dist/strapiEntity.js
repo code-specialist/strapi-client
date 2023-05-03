@@ -48,13 +48,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrapiEntity = void 0;
-var strapiClient_1 = require("./strapiClient");
 var StrapiEntity = /** @class */ (function () {
-    function StrapiEntity(path, childEntities, client) {
-        if (client === void 0) { client = strapiClient_1.strapiClient; }
-        this.path = path;
-        this.childEntities = childEntities;
-        this.client = client;
+    function StrapiEntity(strapiEntity) {
+        this.client = strapiEntity.client;
+        this.path = strapiEntity.path;
+        this.childEntities = strapiEntity.childEntities;
     }
     StrapiEntity.prototype.spreadEntity = function (entity) {
         if (!entity) {
@@ -146,44 +144,47 @@ var StrapiEntity = /** @class */ (function () {
             });
         });
     };
-    StrapiEntity.prototype.findOneBy = function (fieldName, value) {
+    StrapiEntity.prototype.findOneBy = function (_a) {
+        var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
             var data, entity;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, this.find(fieldName, value)];
                     case 1:
-                        data = _a.sent();
+                        data = _b.sent();
                         entity = data[0];
                         return [2 /*return*/, this.unpackEntity(entity)];
                 }
             });
         });
     };
-    StrapiEntity.prototype.findAllBy = function (fieldName, value) {
+    StrapiEntity.prototype.findAllBy = function (_a) {
+        var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
             var data;
             var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, this.find(fieldName, value)];
                     case 1:
-                        data = _a.sent();
+                        data = _b.sent();
                         return [2 /*return*/, data.map(function (entry) { return _this.unpackEntity(entry); })];
                 }
             });
         });
     };
-    StrapiEntity.prototype.get = function (id) {
+    StrapiEntity.prototype.get = function (_a) {
+        var id = _a.id;
         return __awaiter(this, void 0, void 0, function () {
             var response, data;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0: return [4 /*yield*/, this.client.get("".concat(this.path, "/").concat(id), {
                             params: this.getPopulates(),
                         })];
                     case 1:
-                        response = _a.sent();
+                        response = _b.sent();
                         data = response.data.data;
                         return [2 /*return*/, this.unpackEntity(data)];
                 }

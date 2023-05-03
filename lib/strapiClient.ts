@@ -1,17 +1,25 @@
-import axios from "axios";
-import { config } from "./config";
+import axios, { CreateAxiosDefaults } from "axios";
 
-if (!config.base_url) {
-	throw new Error("STRAPI_ENDPOINT is not defined");
-}
-if (!config.apiKey) {
-	throw new Error("STRAPI_API_KEY is not defined");
+interface ICreateStrapiClient {
+	baseUrl: string;
+	apiKey: string;
+	timeout?: number;
+	additionalConfig?: CreateAxiosDefaults<any>;
 }
 
-export const strapiClient = axios.create({
-	baseURL: `${config.base_url}/api`,
-	timeout: config.timeout,
-	headers: {
-		Authorization: `Bearer ${config.apiKey}`,
-	},
-});
+export function createStrapiClient({
+	baseUrl,
+	apiKey,
+	timeout,
+	additionalConfig,
+}: ICreateStrapiClient) {
+	// TODO: There are possible merge conflicts with the additionalConfig e.g. headers
+	return axios.create({
+		baseURL: `${baseUrl}/api`,
+		timeout: timeout,
+		headers: {
+			Authorization: `Bearer ${apiKey}`,
+		},
+		...additionalConfig,
+	});
+}

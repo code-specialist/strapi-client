@@ -1,9 +1,21 @@
-import { AxiosInstance } from 'axios';
+import { AxiosInstance } from "axios";
+interface IFilter {
+    fieldName: string;
+    value: string;
+}
+interface IID {
+    id: number;
+}
+interface IStrapiEntity {
+    client: AxiosInstance;
+    path: string;
+    childEntities?: string[];
+}
 export declare class StrapiEntity<T> {
+    private readonly client;
     private readonly path;
     private readonly childEntities?;
-    private readonly client;
-    constructor(path: string, childEntities?: string[] | undefined, client?: AxiosInstance);
+    constructor(strapiEntity: IStrapiEntity);
     private spreadEntity;
     private spreadChildEntity;
     private setObjectValue;
@@ -12,7 +24,8 @@ export declare class StrapiEntity<T> {
     private getFilter;
     private find;
     getAll(): Promise<T[]>;
-    findOneBy(fieldName: string, value: string): Promise<T>;
-    findAllBy(fieldName: string, value: string): Promise<T[]>;
-    get(id: number): Promise<T>;
+    findOneBy({ fieldName, value }: IFilter): Promise<T>;
+    findAllBy({ fieldName, value }: IFilter): Promise<T[]>;
+    get({ id }: IID): Promise<T>;
 }
+export {};

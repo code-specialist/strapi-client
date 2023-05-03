@@ -35,35 +35,26 @@ TODO:
     }
     ```
     You may find the `StrapiBaseImageType` useful for your interface if you want to use images in your entity.
+2. Create a client
+    ```ts
+    import { createStrapiClient } from "@code-specialist/strapi-client";
 
-2. Create a entity class that extends `StrapiEntity`
+    const client = createStrapiClient({baseUrl: "https://cs.code-specialist.con", apiKey: "YOUR_API_KEY"});
+    ```   
+
+3. Create an instance of the `StrapiEntity` class
     ```ts
     import { StrapiEntity } from "@code-specialist/strapi-client";
-    class PostEntity extends StrapiEntity<IPost> {
-        constructor() {
-            super("posts", ["image", "author", "author.image"]);
-        }
-    }
-    ```
-
-3. Create an instance of your entity class
-    ```ts
-    const postEntity = new PostEntity();
+    const postEntity = new StrapiEntity<IPost>({client: client, path: "posts", childEntities: ["image", "author", "author.image"]})
     ```
 
 4. Use the instance to fetch data from Strapi
     ```ts
-    const post: IPost = await postEntity.find("slug", "dry"); // Should be a unique field. However always the first result is returned
-    const posts: IPost[] = await postEntity.findAll("category", "python");
+    const post: IPost = await postEntity.find({fieldName: "slug", value: "dry"}); // Should be a unique field. However always the first result is returned
+    const posts: IPost[] = await postEntity.findAll({fieldName: "category", value: "python")};
     const posts: IPost[] = await postEntity.getAll();
-    const post: IPost  = await postEntity.get(1); // ID
+    const post: IPost  = await postEntity.get({id: 1}); // ID
     ```
-
-### Environment Variables
-
-- `STRAPI_BASE_URL`: The URL of your Strapi instance (e.g. `https://strapi.code-specialist.com`, without `/api`)
-- `STRAPI_API_KEY`: A valid API key for your Strapi instance (Atleast read permissions)
-- `STRAPI_TIMEOUT`: The timeout for requests to Strapi (default: `10000`) 
 
 ## Testing
 

@@ -1,5 +1,4 @@
-import { AxiosInstance } from 'axios';
-import { strapiClient } from './strapiClient';
+import { AxiosInstance } from "axios";
 
 interface GenericAttribute {
 	[key: string]: any;
@@ -14,12 +13,33 @@ interface GenericStrapiData {
 	data: GenericStrapiEntity;
 }
 
+interface IFilter {
+	fieldName: string;
+	value: string;
+}
+
+interface IID {
+	id: number;
+}
+
+interface IStrapiEntity {
+	client: AxiosInstance;
+	path: string;
+	childEntities?: string[];
+}
+
 export class StrapiEntity<T> {
+	private readonly client: AxiosInstance;
+	private readonly path: string;
+	private readonly childEntities?: string[];
+
 	constructor(
-		private readonly path: string,
-		private readonly childEntities?: string[],
-		private readonly client: AxiosInstance = strapiClient,
-	) {}
+		strapiEntity: IStrapiEntity,
+	) {
+		this.client= strapiEntity.client;
+		this.path = strapiEntity.path;
+		this.childEntities = strapiEntity.childEntities;
+	}
 
 	private spreadEntity(entity: GenericStrapiEntity): T | null {
 		if (!entity) {
@@ -110,18 +130,18 @@ export class StrapiEntity<T> {
 		return data.map((entry) => this.unpackEntity(entry));
 	}
 
-	public async findOneBy(fieldName: string, value: string): Promise<T> {
+	public async findOneBy({ fieldName, value }: IFilter): Promise<T> {
 		const data = await this.find(fieldName, value);
 		const entity = data[0] as GenericStrapiEntity;
 		return this.unpackEntity(entity) as T;
 	}
 
-	public async findAllBy(fieldName: string, value: string): Promise<T[]> {
+	public async findAllBy({ fieldName, value }: IFilter): Promise<T[]> {
 		const data = await this.find(fieldName, value);
 		return data.map((entry) => this.unpackEntity(entry));
 	}
 
-	public async get(id: number): Promise<T> {
+	public async get({ id }: IID): Promise<T> {
 		const response = await this.client.get(`${this.path}/${id}`, {
 			params: this.getPopulates(),
 		});
