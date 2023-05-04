@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 const testClient = axios.create() as AxiosInstance;
 
 interface TestEntity {
@@ -38,57 +38,59 @@ interface TestEntity {
 }
 
 const input = {
-	id: 1,
-	attributes: {
-		name: "Test Entity",
-		subEntity: {
-			data: {
-				id: 2,
-				attributes: {
-					name: "Test Sub Entity",
-					subSubEntity: {
-						data: {
-							id: 3,
-							attributes: {
-								name: "Test Sub Sub Entity",
+	data: {
+		id: 1,
+		attributes: {
+			name: "Test Entity",
+			subEntity: {
+				data: {
+					id: 2,
+					attributes: {
+						name: "Test Sub Entity",
+						subSubEntity: {
+							data: {
+								id: 3,
+								attributes: {
+									name: "Test Sub Sub Entity",
+								},
 							},
 						},
-					},
-					subSubEntityList: {
-						data: [
-							{
-								id: 4,
-								attributes: {
-									name: "Test Sub Sub Entity 1",
-									subSubSubEntityList: {
-										data: [
-											{
-												id: 6,
-												attributes: {
-													name: "Test Sub Sub Sub Entity 1",
+						subSubEntityList: {
+							data: [
+								{
+									id: 4,
+									attributes: {
+										name: "Test Sub Sub Entity 1",
+										subSubSubEntityList: {
+											data: [
+												{
+													id: 6,
+													attributes: {
+														name: "Test Sub Sub Sub Entity 1",
+													},
 												},
-											},
-										],
+											],
+										},
 									},
 								},
-							},
-							{
-								id: 5,
-								attributes: {
-									name: "Test Sub Sub Entity 2",
-									subSubSubEntityList: {
-										data: [
-											{
-												id: 7,
-												attributes: {
-													name: "Test Sub Sub Sub Entity 1",
+								{
+									id: 5,
+									attributes: {
+										name: "Test Sub Sub Entity 2",
+										subSubSubEntityList: {
+											data: [
+												{
+													id: 7,
+													attributes: {
+														name: "Test Sub Sub Sub Entity 1",
+													},
 												},
-											},
-										],
+											],
+										},
 									},
 								},
-							},
-						],
+							],
+						},
 					},
 				},
 			},
@@ -131,7 +133,9 @@ const expectedOutput: TestEntity = {
 	},
 };
 
-describe.skip("StrapiEntity.unpackEntity", () => {
+
+
+describe("StrapiEntity.unpackEntity", () => {
 	let strapiEntity: StrapiEntity<TestEntity>;
 
 	beforeAll(() => {
@@ -148,8 +152,7 @@ describe.skip("StrapiEntity.unpackEntity", () => {
 	});
 
 	it("should be able to unpack a nested datastructure successfully", async () => {
-		const result = await strapiEntity["unpackEntity"](input);
-		console.log(result);
+		const result = strapiEntity["flattenDataStructure"](input);
 		expect(result).toEqual(expectedOutput);
 	});
 });

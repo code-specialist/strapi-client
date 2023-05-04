@@ -42,13 +42,13 @@ export interface StrapiBaseImageType {
 }
 
 
-interface GenericStrapiEntity {
+interface GenericStrapiEntity<T> {
 	id: number;
-	attributes: object;
+	attributes: T;
 }
 
-interface GenericStrapiData {
-	data: GenericStrapiEntity;
+interface GenericStrapiData<T> {
+	data: GenericStrapiEntity<T>;
 }
 
 interface IFilter {

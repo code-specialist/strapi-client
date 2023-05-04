@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 const testClient = axios.create() as AxiosInstance;
 
 interface TestEntity {
@@ -47,7 +47,7 @@ describe("StrapiEntity.unpackEntity", () => {
 	});
 
 	it("should be able to unpack a simple data structure", async () => {
-		const result = await strapiEntity["unpackEntity"](input);
+		const result = strapiEntity["flattenDataStructure"](input);
 		expect(result).toEqual(expectedOutput);
 	});
 });
