@@ -1,11 +1,6 @@
 import { AxiosInstance } from "axios";
-import {
-	GenericStrapiData,
-	GenericStrapiEntity,
-	IFilter,
-	IID,
-	IStrapiEntity,
-} from "./strapiTypes";
+import { GenericStrapiData, GenericStrapiEntity, IFilter, IID, IStrapiEntity } from "./strapiTypes";
+
 
 export class StrapiEntity<T> {
 	private readonly client: AxiosInstance;

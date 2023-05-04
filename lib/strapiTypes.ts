@@ -1,3 +1,5 @@
+import { AxiosInstance } from "axios";
+
 export interface StrapiBaseDataType {
 	id: number;
 	createdAt: Date;
@@ -41,26 +43,25 @@ export interface StrapiBaseImageType {
 	updatedAt: Date;
 }
 
-
-interface GenericStrapiEntity<T> {
+export interface GenericStrapiEntity<T> {
 	id: number;
 	attributes: T;
 }
 
-interface GenericStrapiData<T> {
+export interface GenericStrapiData<T> {
 	data: GenericStrapiEntity<T>;
 }
 
-interface IFilter {
+export interface IFilter {
 	fieldName: string;
 	value: string;
 }
 
-interface IID {
+export interface IID {
 	id: number;
 }
 
-interface IStrapiEntity {
+export interface IStrapiEntity {
 	client: AxiosInstance;
 	path: string;
 	childEntities?: string[];

@@ -1,3 +1,3 @@
-export * from "./strapiTypes";
-export * from "./strapiEntity";
-export * from "./strapiClient";
+export { StrapiBaseDataType, StrapiBaseImageType } from "./strapiTypes";
+export { StrapiEntity } from "./strapiEntity";
+export { createStrapiClient } from "./strapiClient";
