@@ -46,6 +46,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrapiEntity = void 0;
 var StrapiEntity = /** @class */ (function () {
@@ -54,56 +65,29 @@ var StrapiEntity = /** @class */ (function () {
         this.path = strapiEntity.path;
         this.childEntities = strapiEntity.childEntities;
     }
-    StrapiEntity.prototype.spreadEntity = function (entity) {
-        if (!entity) {
-            return null;
-        }
-        var result = __assign({ id: entity.id }, entity.attributes);
-        return result;
-    };
-    StrapiEntity.prototype.spreadChildEntity = function (entity) {
-        if (!(entity === null || entity === void 0 ? void 0 : entity.data)) {
-            return null;
-        }
-        var result = __assign({ id: entity.data.id }, entity.data.attributes);
-        return result;
-    };
-    StrapiEntity.prototype.setObjectValue = function (object, path, value) {
-        var pathArray = path.split(".");
-        var currentObj = object;
-        for (var i = 0; i < pathArray.length - 1; i++) {
-            var key = pathArray[i];
-            if (currentObj[key] === undefined) {
-                currentObj[key] = {};
-            }
-            currentObj = currentObj[key];
-        }
-        currentObj[pathArray[pathArray.length - 1]] = value;
-    };
-    StrapiEntity.prototype.unpackEntity = function (entity) {
+    StrapiEntity.prototype.flattenDataStructure = function (data) {
         var _this = this;
-        var baseEntity = this.spreadEntity(entity);
-        if (!this.childEntities) {
-            return baseEntity;
+        if (!data) {
+            return null;
         }
-        this.childEntities.forEach(function (childEntity) {
-            var path = childEntity.split(".");
-            path.forEach(function (pathPart, depth) {
-                var targetValue = baseEntity;
-                for (var _i = 0, _a = path.splice(depth); _i < _a.length; _i++) {
-                    var key = _a[_i];
-                    if (!targetValue) {
-                        throw new Error("Invalid path ".concat(childEntity));
-                    }
-                    // @ts-ignore TODO: fix this
-                    targetValue = targetValue[key];
-                }
-                // @ts-ignore TODO: fix this
-                var content = _this.spreadChildEntity(targetValue);
-                _this.setObjectValue(baseEntity, childEntity, content);
-            });
-        });
-        return baseEntity;
+        if (data.hasOwnProperty("data")) {
+            data = data.data;
+        }
+        if (data.hasOwnProperty("attributes")) {
+            var attributes = data.attributes, rest = __rest(data, ["attributes"]);
+            data = __assign(__assign({}, rest), attributes);
+        }
+        for (var key in data) {
+            if (Array.isArray(data[key])) {
+                data[key] = data[key].map(function (item) {
+                    return _this.flattenDataStructure(item);
+                });
+            }
+            else if (typeof data[key] === "object") {
+                data[key] = this.flattenDataStructure(data[key]);
+            }
+        }
+        return data;
     };
     StrapiEntity.prototype.getPopulates = function () {
         return this.childEntities ? { populate: this.childEntities.join(",") } : {};
@@ -122,15 +106,14 @@ var StrapiEntity = /** @class */ (function () {
                         })];
                     case 1:
                         response = _a.sent();
-                        return [2 /*return*/, response.data.data];
+                        return [2 /*return*/, response.data];
                 }
             });
         });
     };
     StrapiEntity.prototype.getAll = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var response, data;
-            var _this = this;
+            var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.client.get(this.path, {
@@ -138,8 +121,7 @@ var StrapiEntity = /** @class */ (function () {
                         })];
                     case 1:
                         response = _a.sent();
-                        data = response.data.data;
-                        return [2 /*return*/, data.map(function (entry) { return _this.unpackEntity(entry); })];
+                        return [2 /*return*/, this.flattenDataStructure(response.data)];
                 }
             });
         });
@@ -147,14 +129,13 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.findOneBy = function (_a) {
         var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
-            var data, entity;
+            var data;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.find(fieldName, value)];
+                    case 0: return [4 /*yield*/, this.findAllBy({ fieldName: fieldName, value: value })];
                     case 1:
                         data = _b.sent();
-                        entity = data[0];
-                        return [2 /*return*/, this.unpackEntity(entity)];
+                        return [2 /*return*/, data[0]];
                 }
             });
         });
@@ -163,13 +144,12 @@ var StrapiEntity = /** @class */ (function () {
         var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
             var data;
-            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.find(fieldName, value)];
                     case 1:
                         data = _b.sent();
-                        return [2 /*return*/, data.map(function (entry) { return _this.unpackEntity(entry); })];
+                        return [2 /*return*/, this.flattenDataStructure(data)];
                 }
             });
         });
@@ -177,7 +157,7 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.get = function (_a) {
         var id = _a.id;
         return __awaiter(this, void 0, void 0, function () {
-            var response, data;
+            var response;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.client.get("".concat(this.path, "/").concat(id), {
@@ -185,8 +165,7 @@ var StrapiEntity = /** @class */ (function () {
                         })];
                     case 1:
                         response = _b.sent();
-                        data = response.data.data;
-                        return [2 /*return*/, this.unpackEntity(data)];
+                        return [2 /*return*/, this.flattenDataStructure(response.data)];
                 }
             });
         });
