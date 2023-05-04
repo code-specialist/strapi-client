@@ -73,6 +73,9 @@ var StrapiEntity = /** @class */ (function () {
         if (data.hasOwnProperty("data")) {
             data = data.data;
         }
+        if (!data) {
+            return null;
+        }
         if (data.hasOwnProperty("attributes")) {
             var attributes = data.attributes, rest = __rest(data, ["attributes"]);
             data = __assign(__assign({}, rest), attributes);

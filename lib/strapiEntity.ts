@@ -22,6 +22,10 @@ export class StrapiEntity<T> {
 			data = data.data;
 		}
 
+		if (!data) {
+			return null;
+		}
+
 		if (data.hasOwnProperty("attributes")) {
 			const { attributes, ...rest } = data;
 			data = { ...rest, ...attributes };
