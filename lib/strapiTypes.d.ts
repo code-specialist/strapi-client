@@ -42,4 +42,26 @@ export interface StrapiBaseImageType {
 }
 
 
+interface GenericStrapiEntity<T> {
+	id: number;
+	attributes: T;
+}
 
+interface GenericStrapiData<T> {
+	data: GenericStrapiEntity<T>;
+}
+
+interface IFilter {
+	fieldName: string;
+	value: string;
+}
+
+interface IID {
+	id: number;
+}
+
+interface IStrapiEntity {
+	client: AxiosInstance;
+	path: string;
+	childEntities?: string[];
+}

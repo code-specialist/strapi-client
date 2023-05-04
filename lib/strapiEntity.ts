@@ -1,104 +1,48 @@
 import { AxiosInstance } from "axios";
-
-interface GenericAttribute {
-	[key: string]: any;
-}
-
-interface GenericStrapiEntity {
-	id: number;
-	attributes: GenericAttribute[];
-}
-
-interface GenericStrapiData {
-	data: GenericStrapiEntity;
-}
-
-interface IFilter {
-	fieldName: string;
-	value: string;
-}
-
-interface IID {
-	id: number;
-}
-
-interface IStrapiEntity {
-	client: AxiosInstance;
-	path: string;
-	childEntities?: string[];
-}
+import {
+	GenericStrapiData,
+	GenericStrapiEntity,
+	IFilter,
+	IID,
+	IStrapiEntity,
+} from "./strapiTypes";
 
 export class StrapiEntity<T> {
 	private readonly client: AxiosInstance;
 	private readonly path: string;
 	private readonly childEntities?: string[];
 
-	constructor(
-		strapiEntity: IStrapiEntity,
-	) {
-		this.client= strapiEntity.client;
+	constructor(strapiEntity: IStrapiEntity) {
+		this.client = strapiEntity.client;
 		this.path = strapiEntity.path;
 		this.childEntities = strapiEntity.childEntities;
 	}
 
-	private spreadEntity(entity: GenericStrapiEntity): T | null {
-		if (!entity) {
+	private flattenDataStructure(data: any) {
+		if (!data) {
 			return null;
 		}
 
-		const result = { id: entity.id, ...entity.attributes } as T;
-		return result;
-	}
-
-	private spreadChildEntity(entity: GenericStrapiData): T | null {
-		if (!entity?.data) {
-			return null;
+		if (data.hasOwnProperty("data")) {
+			data = data.data;
 		}
 
-		const result = { id: entity.data.id, ...entity.data.attributes } as T;
-		return result;
-	}
+		if (data.hasOwnProperty("attributes")) {
+			const { attributes, ...rest } = data;
+			data = { ...rest, ...attributes };
+		}
 
-	private setObjectValue(object: any, path: string, value: any) {
-		const pathArray = path.split(".");
-		let currentObj = object;
-
-		for (let i = 0; i < pathArray.length - 1; i++) {
-			const key = pathArray[i];
-			if (currentObj[key] === undefined) {
-				currentObj[key] = {};
+		for (const key in data) {
+			if (Array.isArray(data[key])) {
+				data[key] = data[key].map((item: any) => {
+					return this.flattenDataStructure(item);
+				});
+			} else if (typeof data[key] === "object") {
+				data[key] = this.flattenDataStructure(data[key]);
 			}
-			currentObj = currentObj[key];
-		}
-		currentObj[pathArray[pathArray.length - 1]] = value;
-	}
-
-	private unpackEntity(entity: GenericStrapiEntity): T {
-		const baseEntity = this.spreadEntity(entity);
-
-		if (!this.childEntities) {
-			return baseEntity as T;
 		}
 
-		this.childEntities.forEach((childEntity) => {
-			const path = childEntity.split(".");
-
-			path.forEach((pathPart, depth) => {
-				let targetValue = baseEntity;
-				for (const key of path.splice(depth)) {
-					if (!targetValue) {
-						throw new Error(`Invalid path ${childEntity}`);
-					}
-					// @ts-ignore TODO: fix this
-					targetValue = targetValue[key];
-				}
-				// @ts-ignore TODO: fix this
-				const content = this.spreadChildEntity(targetValue);
-				this.setObjectValue(baseEntity, childEntity, content);
-			});
-		});
-
-		return baseEntity as T;
+		return data;
 	}
 
 	private getPopulates(): object {
@@ -106,48 +50,43 @@ export class StrapiEntity<T> {
 	}
 
 	private getFilter(fieldName: string, value: string): object {
-		const path = fieldName.split(".");
-		const fieldPath = path.map(layer => `\[${layer}\]`);
-		return { [`filters${fieldPath}`]: value };
+		return { [`filters[${fieldName}]`]: value };
 	}
 
 	private async find(
 		fieldName: string,
 		value: string,
-	): Promise<GenericStrapiEntity[]> {
+	): Promise<GenericStrapiData<GenericStrapiEntity<any>[]>> {
 		const response = await this.client.get(this.path, {
 			params: {
 				...this.getPopulates(),
 				...this.getFilter(fieldName, value),
 			},
 		});
-		return response.data.data;
+		return response.data;
 	}
 
 	public async getAll(): Promise<T[]> {
 		const response = await this.client.get(this.path, {
 			params: this.getPopulates(),
 		});
-		const data = response.data.data as GenericStrapiEntity[];
-		return data.map((entry) => this.unpackEntity(entry));
+		return this.flattenDataStructure(response.data);
 	}
 
 	public async findOneBy({ fieldName, value }: IFilter): Promise<T> {
-		const data = await this.find(fieldName, value);
-		const entity = data[0] as GenericStrapiEntity;
-		return this.unpackEntity(entity) as T;
+		const data = await this.findAllBy({ fieldName, value });
+		return data[0];
 	}
 
 	public async findAllBy({ fieldName, value }: IFilter): Promise<T[]> {
 		const data = await this.find(fieldName, value);
-		return data.map((entry) => this.unpackEntity(entry));
+		return this.flattenDataStructure(data);
 	}
 
 	public async get({ id }: IID): Promise<T> {
 		const response = await this.client.get(`${this.path}/${id}`, {
 			params: this.getPopulates(),
 		});
-		const data = response.data.data as GenericStrapiEntity;
-		return this.unpackEntity(data) as T;
+		return this.flattenDataStructure(response.data);
 	}
 }
