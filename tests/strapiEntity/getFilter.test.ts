@@ -18,10 +18,5 @@ describe("StrapiEntity", () => {
 			const filter = entity["getFilter"]("name", "test");
 			expect(filter).toEqual({ "filters[name]": "test" });
 		});
-
-		it("should return the correct filter object for a nested field name", () => {
-			const filter = entity["getFilter"]("address.city", "New York");
-			expect(filter).toEqual({ "filters[address][city]": "New York" });
-		});
 	});
 });
