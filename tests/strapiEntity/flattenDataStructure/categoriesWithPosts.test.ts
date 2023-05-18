@@ -15,6 +15,5 @@ describe("StrapiEntity.unpackEntity", () => {
 
 	it("should be able to unpack a simple data structure", async () => {
 		const result = strapiEntity["flattenDataStructure"](categoriesWithPosts);
-		console.log(result)
 	});
 });
