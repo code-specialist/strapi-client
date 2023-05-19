@@ -5,46 +5,20 @@ const mockClient = {
 	get: jest.fn(),
 };
 
-describe("queryStrapi", () => {
+
+describe("getAll", () => {
 	let entity: StrapiEntity<any>;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
 
-	it("should respect custom page sizes", async () => {
-		// @ts-ignore
-		entity = new StrapiEntity({ client: mockClient, path: "/test" }, 50);
-
-		// Mock response
-		mockClient.get.mockImplementationOnce(() =>
-			Promise.resolve({
-				data: {
-					metadata: {
-						pagination: {
-							page: 1,
-							pageCount: 1,
-						},
-					},
-					data: [],
-				},
-			}),
-		);
-
-		await entity["queryStrapi"]({});
-
-		expect(mockClient.get).toHaveBeenCalledWith("/test", {
-			params: {
-				"pagination[pageSize]": 50,
-				"pagination[page]": 1,
-			},
-		});
-	});
-
-	it("should fetch data from Strapi with pagination", async () => {
+	beforeAll(() => {
 		// @ts-ignore
 		entity = new StrapiEntity({ client: mockClient, path: "/test" });
+	});
 
+	it("should fetch all data from Strapi with pagination", async () => {
 		// Mock first response
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
@@ -75,7 +49,7 @@ describe("queryStrapi", () => {
 			}),
 		);
 
-		const result = await entity["queryStrapi"]({});
+		const result = await entity.getAll();
 
 		expect(mockClient.get).toHaveBeenCalledTimes(2); // Two requests made due to pagination
 		expect(mockClient.get).toHaveBeenCalledWith("/test", {
@@ -91,14 +65,10 @@ describe("queryStrapi", () => {
 			},
 		});
 
-		expect(result.data).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
-		expect(result.metadata?.pagination?.pageCount).toBe(2);
+		expect(result).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
 	});
 
-	it("should fetch data from Strapi without pagination", async () => {
-		// @ts-ignore
-		entity = new StrapiEntity({ client: mockClient, path: "/test" });
-
+	it("should fetch all data from Strapi without pagination", async () => {
 		// Arrange
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
@@ -115,7 +85,7 @@ describe("queryStrapi", () => {
 		);
 
 		// Act
-		const result = await entity["queryStrapi"]({});
+		const result = await entity.getAll();
 
 		// Assert
 		expect(mockClient.get).toHaveBeenCalledTimes(1); // Only one request made
@@ -126,13 +96,10 @@ describe("queryStrapi", () => {
 			},
 		});
 
-		expect(result.data).toEqual([{ id: 1 }, { id: 2 }]);
+		expect(result).toEqual([{ id: 1 }, { id: 2 }]);
 	});
 
-	it("should add the populates and filters", async () => {
-		// @ts-ignore
-		entity = new StrapiEntity({ client: mockClient, path: "/test" });
-
+	it("should return empty array when no data is available", async () => {
 		// Arrange
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
@@ -140,41 +107,26 @@ describe("queryStrapi", () => {
 					metadata: {
 						pagination: {
 							page: 1,
-							pageCount: 1,
+							pageCount: 0,
 						},
 					},
-					data: [{ id: 1 }, { id: 2 }],
+					data: [],
 				},
 			}),
 		);
 
-		// @ts-ignore
-		entity = new StrapiEntity({
-			// @ts-ignore
-			client: mockClient,
-			path: "/test",
-			childEntities: ["test", "test2", "someOtherAttribute", "root.nested"],
-		});
-
 		// Act
-		const populates = entity["getPopulates"]();
-		const filters = entity["getFilter"]("test", "test");
-		const result = await entity["queryStrapi"]({
-			populates: populates,
-			filters: filters,
-		});
+		const result = await entity.getAll();
 
 		// Assert
 		expect(mockClient.get).toHaveBeenCalledTimes(1); // Only one request made
 		expect(mockClient.get).toHaveBeenCalledWith("/test", {
 			params: {
-				populate: "test,test2,someOtherAttribute,root.nested",
-				"filters[test]": "test",
 				"pagination[pageSize]": 25,
 				"pagination[page]": 1,
 			},
 		});
 
-		expect(result.data).toEqual([{ id: 1 }, { id: 2 }]);
+		expect(result).toEqual([]);
 	});
 });
