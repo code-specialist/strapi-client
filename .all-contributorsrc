@@ -11,6 +11,16 @@
   "commitConvention": "eslint",
   "contributors": [
     {
+      "login": "JonasScholl",
+      "name": "Jonas Scholl",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43819845?v=4",
+      "profile": "https://github.com/JonasScholl",
+      "contributions": [
+        "code"
+      ]
+    },
+    
+    {
       "login": "yannicschroeer",
       "name": "Yannic Schröer",
       "avatar_url": "https://avatars.githubusercontent.com/u/22749683?v=4",
