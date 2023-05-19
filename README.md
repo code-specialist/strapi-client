@@ -1,4 +1,6 @@
-## Intro
+## Intro 
+
+[![All Contributors](https://img.shields.io/github/all-contributors/code-specialist/strapi-client?color=ee8449&style=flat-square)](#contributors)
 
 The main purpose of this library is to streamline the integration of Strapi APIs into TypeScript projects. It provides a typed interface for interacting with Strapi entities and offers a client creation function that encapsulates the necessary configuration.
 
@@ -29,8 +31,6 @@ It's important to note the following limitations of this library:
 
 - Currently, it does not support attributes named `data` in Strapi entities.
 - Error handling and retries are not yet implemented 
-- 
-Please keep in mind that this documentation is based on the provided files and the inferred purpose and functionality of the library. It's recommended to refer to the actual code implementation and any accompanying comments for a more detailed understanding of the library's features and limitations.
 
 ## Installation
 
@@ -98,7 +98,19 @@ If you have any feature requests, please open an issue with the `enhancement` la
 
 ## Contribution
 
-TODO: Add contribution guidelines "All contributions are welcome"
+We appreciate and welcome contributions from the community to make this library even better! Whether you're a developer, designer, or documentation enthusiast, there are several ways you can contribute to this project and have a positive impact:
+
+- **Bug Reports and Feature Requests**: If you encounter any bugs or have ideas for new features, please submit an issue on our [issues](https://github.com/code-specialist/strapi-client/issues/new). Be sure to provide clear and detailed information to help us understand and address the problem effectively.
+
+- **Code Contributions**: If you'd like to contribute code to the project, feel free to fork the repository, make your changes, and submit a pull request. We review all pull requests and appreciate improvements, bug fixes, and optimizations. Please ensure that your code adheres to our coding standards and includes appropriate tests and documentation.
+
+- **Documentation Improvements**: Documentation is vital to help users understand and utilize the library effectively. If you notice any areas that can be clarified, expanded, or improved, please submit a pull request with your proposed changes. We value well-written and comprehensive documentation.
+
+- **Community Support**: Help us build a thriving and inclusive community around this library. You can participate in discussions, answer questions, and provide support to fellow developers on our [issues](https://github.com/code-specialist/strapi-client/issues/new). Sharing your experiences and knowledge can make a significant difference to the success of the project.
+
+Remember, every contribution, no matter how big or small, is valuable and appreciated. We follow the [All Contributors](https://allcontributors.org) specification to recognize and celebrate all contributors' efforts. By contributing to this project, you become a part of our growing community and leave a positive impact on developers using this library.
+
+Thank you for considering contributing to this project. We look forward to your involvement and appreciate your support in making this library the best it can be!
 
 ## Testing
 
@@ -318,4 +330,13 @@ Represents the format of an image.
 - `width` (number): The width of the image.
 - `height` (number): The height of the image.
 
+## Contributors
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
