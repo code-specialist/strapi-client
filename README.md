@@ -2,14 +2,19 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml) [![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/strapi-client/badge)](https://www.codefactor.io/repository/github/code-specialist/strapi-client) [![codecov](https://codecov.io/github/code-specialist/strapi-client/branch/main/graph/badge.svg?token=4DY9OB2KR5)](https://codecov.io/github/code-specialist/strapi-client)
+[![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/strapi-client/badge)](https://www.codefactor.io/repository/github/code-specialist/strapi-client)
+[![codecov](https://codecov.io/github/code-specialist/strapi-client/branch/main/graph/badge.svg?token=4DY9OB2KR5)](https://codecov.io/github/code-specialist/strapi-client)
 
 ---
 # Introduction
 
-The main purpose of this library is to streamline the integration of Strapi APIs into TypeScript projects. It provides a typed interface for interacting with Strapi entities and offers a client creation function that encapsulates the necessary configuration.
+The main purpose of this library is to streamline the integration of Strapi APIs into TypeScript projects. It provides a typed interface for interacting with Strapi entities and
+offers a client creation function that encapsulates the necessary configuration.
 
-### Functionality
+**This library is compatible only with Strapi v4**.
+
+## Functionality
 
 The library enables you to perform the following tasks:
 
@@ -18,7 +23,7 @@ The library enables you to perform the following tasks:
 - Paginate through data sets
 - Retrieve single entities by ID or find entities based on specific attributes
 
-### Benefits
+## Benefits
 
 By using this library, you can:
 
@@ -26,11 +31,12 @@ By using this library, you can:
 - Simplify the process of querying and retrieving data from Strapi by providing a convenient and intuitive interface.
 - Easily customize and extend the library to fit your specific project needs.
 
-### Implementation
+## Implementation
 
-The library utilizes Axios, a popular HTTP client, to make requests to the Strapi API. It provides a set of interfaces that define the data structures used by Strapi, such as base data types and image types. Additionally, it includes utility functions for flattening and manipulating the received data to provide a more accessible and consistent format.
+The library utilizes Axios, a popular HTTP client, to make requests to the Strapi API. It provides a set of interfaces that define the data structures used by Strapi, such as base
+data types and image types. Additionally, it includes utility functions for flattening and manipulating the received data to provide a more accessible and consistent format.
 
-### Limitations
+## Limitations
 
 It's important to note the following limitations of this library:
 
@@ -103,17 +109,25 @@ If you have any feature requests, please open an issue with the `enhancement` la
 
 ## Contribution
 
-We appreciate and welcome contributions from the community to make this library even better! Whether you're a developer, designer, or documentation enthusiast, there are several ways you can contribute to this project and have a positive impact:
+We appreciate and welcome contributions from the community to make this library even better! Whether you're a developer, designer, or documentation enthusiast, there are several
+ways you can contribute to this project and have a positive impact:
 
-- **Bug Reports and Feature Requests**: If you encounter any bugs or have ideas for new features, please submit an issue on our [issues](https://github.com/code-specialist/strapi-client/issues/new). Be sure to provide clear and detailed information to help us understand and address the problem effectively.
+- **Bug Reports and Feature Requests**: If you encounter any bugs or have ideas for new features, please submit an issue on our
+  [issues](https://github.com/code-specialist/strapi-client/issues/new). Be sure to provide clear and detailed information to help us understand and address the problem
+  effectively.
 
-- **Code Contributions**: If you'd like to contribute code to the project, feel free to fork the repository, make your changes, and submit a pull request. We review all pull requests and appreciate improvements, bug fixes, and optimizations. Please ensure that your code adheres to our coding standards and includes appropriate tests and documentation.
+- **Code Contributions**: If you'd like to contribute code to the project, feel free to fork the repository, make your changes, and submit a pull request. We review all pull
+  requests and appreciate improvements, bug fixes, and optimizations. Please ensure that your code adheres to our coding standards and includes appropriate tests and documentation.
 
-- **Documentation Improvements**: Documentation is vital to help users understand and utilize the library effectively. If you notice any areas that can be clarified, expanded, or improved, please submit a pull request with your proposed changes. We value well-written and comprehensive documentation.
+- **Documentation Improvements**: Documentation is vital to help users understand and utilize the library effectively. If you notice any areas that can be clarified, expanded, or
+  improved, please submit a pull request with your proposed changes. We value well-written and comprehensive documentation.
 
-- **Community Support**: Help us build a thriving and inclusive community around this library. You can participate in discussions, answer questions, and provide support to fellow developers on our [issues](https://github.com/code-specialist/strapi-client/issues/new). Sharing your experiences and knowledge can make a significant difference to the success of the project.
+- **Community Support**: Help us build a thriving and inclusive community around this library. You can participate in discussions, answer questions, and provide support to fellow
+  developers on our [issues](https://github.com/code-specialist/strapi-client/issues/new). Sharing your experiences and knowledge can make a significant difference to the success
+  of the project.
 
-Remember, every contribution, no matter how big or small, is valuable and appreciated. We follow the [All Contributors](https://allcontributors.org) specification to recognize and celebrate all contributors' efforts. By contributing to this project, you become a part of our growing community and leave a positive impact on developers using this library.
+Remember, every contribution, no matter how big or small, is valuable and appreciated. We follow the [All Contributors](https://allcontributors.org) specification to recognize and
+celebrate all contributors' efforts. By contributing to this project, you become a part of our growing community and leave a positive impact on developers using this library.
 
 Thank you for considering contributing to this project. We look forward to your involvement and appreciate your support in making this library the best it can be!
 
@@ -158,7 +172,8 @@ Represents the default configuration options for creating an Axios instance.
 
 ### StrapiEntity (`strapiEntity.ts`)
 
-The `StrapiEntity` class is a utility class that provides methods for querying data from the Strapi API. It is designed to work with entities in the Strapi API and provides functionality for retrieving, filtering, and flattening data structures.
+The `StrapiEntity` class is a utility class that provides methods for querying data from the Strapi API. It is designed to work with entities in the Strapi API and provides
+functionality for retrieving, filtering, and flattening data structures.
 
 #### Constructor
 
@@ -280,7 +295,7 @@ Represents a generic Strapi entity.
 Represents generic Strapi data.
 
 - `data` (GenericStrapiEntity<T>[]): An array of generic Strapi entities.
-- `metadata` (object):
+- `meta` (object):
   - `pagination` (object):
     - `page` (number): The current page number.
     - `pageSize` (number): The page size.

@@ -79,7 +79,7 @@ export class StrapiEntity<T> {
 				"pagination[page]": page,
 			},
 		});
-		if (response.data?.metadata?.pagination?.pageCount > page) {
+		if (response.data?.meta?.pagination?.pageCount > page) {
 			const additionalData = await this.queryStrapi({
 				path: path,
 				populates: populates,

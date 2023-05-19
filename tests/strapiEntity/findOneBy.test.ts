@@ -22,7 +22,7 @@ describe("findOneBy", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 1,

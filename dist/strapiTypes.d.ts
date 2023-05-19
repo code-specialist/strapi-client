@@ -45,7 +45,7 @@ export interface GenericStrapiEntity<T> {
 }
 export interface GenericStrapiData<T> extends Object {
     data: GenericStrapiEntity<T>[];
-    metadata: {
+    meta: {
         pagination: {
             page: number;
             pageSize: number;

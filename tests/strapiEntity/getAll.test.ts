@@ -23,7 +23,7 @@ describe("getAll", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 2,
@@ -38,7 +38,7 @@ describe("getAll", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 2,
 							pageCount: 2,
@@ -73,7 +73,7 @@ describe("getAll", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 1,
@@ -104,7 +104,7 @@ describe("getAll", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 0,

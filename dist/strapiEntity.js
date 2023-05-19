@@ -112,18 +112,18 @@ var StrapiEntity = /** @class */ (function () {
         return _a = {}, _a["filters[".concat(fieldName, "]")] = value, _a;
     };
     StrapiEntity.prototype.queryStrapi = function (_a) {
-        var _b, _c;
-        var path = _a.path, populates = _a.populates, filters = _a.filters, _d = _a.page, page = _d === void 0 ? 1 : _d;
+        var _b, _c, _d;
+        var path = _a.path, populates = _a.populates, filters = _a.filters, _e = _a.page, page = _e === void 0 ? 1 : _e;
         return __awaiter(this, void 0, void 0, function () {
             var response, additionalData;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0: return [4 /*yield*/, this.client.get(path ? path : this.path, {
-                            params: __assign(__assign(__assign({}, (populates !== null && populates !== void 0 ? populates : {})), (filters !== null && filters !== void 0 ? filters : {})), { "pagination[pageSize]": this.pageSize, "pagination[page]": page }),
+                            params: __assign(__assign(__assign({}, populates), filters), { "pagination[pageSize]": this.pageSize, "pagination[page]": page }),
                         })];
                     case 1:
-                        response = _e.sent();
-                        if (!(((_c = (_b = response.data.metadata) === null || _b === void 0 ? void 0 : _b.pagination) === null || _c === void 0 ? void 0 : _c.pageCount) > page)) return [3 /*break*/, 3];
+                        response = _f.sent();
+                        if (!(((_d = (_c = (_b = response.data) === null || _b === void 0 ? void 0 : _b.meta) === null || _c === void 0 ? void 0 : _c.pagination) === null || _d === void 0 ? void 0 : _d.pageCount) > page)) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.queryStrapi({
                                 path: path,
                                 populates: populates,
@@ -131,7 +131,7 @@ var StrapiEntity = /** @class */ (function () {
                                 page: page + 1,
                             })];
                     case 2:
-                        additionalData = _e.sent();
+                        additionalData = _f.sent();
                         response.data.data = __spreadArray(__spreadArray([], response.data.data, true), additionalData.data, true);
                         return [2 /*return*/, response.data];
                     case 3: return [2 /*return*/, response.data];
@@ -151,13 +151,13 @@ var StrapiEntity = /** @class */ (function () {
     };
     StrapiEntity.prototype.getAll = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var response;
+            var strapiObjects;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.queryStrapi(this.getPopulates())];
+                    case 0: return [4 /*yield*/, this.queryStrapi({ populates: this.getPopulates() })];
                     case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, this.flattenDataStructure(response.data)];
+                        strapiObjects = _a.sent();
+                        return [2 /*return*/, this.flattenDataStructure(strapiObjects)];
                 }
             });
         });
@@ -165,13 +165,13 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.findOneBy = function (_a) {
         var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
-            var data;
+            var strapiObjects;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.findAllBy({ fieldName: fieldName, value: value })];
                     case 1:
-                        data = _b.sent();
-                        return [2 /*return*/, data[0]];
+                        strapiObjects = _b.sent();
+                        return [2 /*return*/, strapiObjects[0]];
                 }
             });
         });
@@ -179,13 +179,13 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.findAllBy = function (_a) {
         var fieldName = _a.fieldName, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
-            var data;
+            var strapiObjects;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.find(fieldName, value)];
                     case 1:
-                        data = _b.sent();
-                        return [2 /*return*/, this.flattenDataStructure(data)];
+                        strapiObjects = _b.sent();
+                        return [2 /*return*/, this.flattenDataStructure(strapiObjects)];
                 }
             });
         });
@@ -193,7 +193,7 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.get = function (_a) {
         var id = _a.id;
         return __awaiter(this, void 0, void 0, function () {
-            var response;
+            var strapiObject;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.queryStrapi({
@@ -201,8 +201,11 @@ var StrapiEntity = /** @class */ (function () {
                             populates: this.getPopulates(),
                         })];
                     case 1:
-                        response = _b.sent();
-                        return [2 /*return*/, this.flattenDataStructure(response.data)];
+                        strapiObject = _b.sent();
+                        if (!strapiObject) {
+                            return [2 /*return*/, null];
+                        }
+                        return [2 /*return*/, this.flattenDataStructure(strapiObject)];
                 }
             });
         });

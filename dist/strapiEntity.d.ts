@@ -13,5 +13,5 @@ export declare class StrapiEntity<T> {
     getAll(): Promise<T[]>;
     findOneBy({ fieldName, value }: IFilter): Promise<T>;
     findAllBy({ fieldName, value }: IFilter): Promise<T[]>;
-    get({ id }: IID): Promise<T>;
+    get({ id }: IID): Promise<T | null>;
 }

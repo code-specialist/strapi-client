@@ -20,7 +20,7 @@ describe("queryStrapi", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 1,
@@ -49,7 +49,7 @@ describe("queryStrapi", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 2,
@@ -64,7 +64,7 @@ describe("queryStrapi", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 2,
 							pageCount: 2,
@@ -92,7 +92,7 @@ describe("queryStrapi", () => {
 		});
 
 		expect(result.data).toEqual([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
-		expect(result.metadata?.pagination?.pageCount).toBe(2);
+		expect(result.meta?.pagination?.pageCount).toBe(2);
 	});
 
 	it("should fetch data from Strapi without pagination", async () => {
@@ -103,7 +103,7 @@ describe("queryStrapi", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 1,
@@ -137,7 +137,7 @@ describe("queryStrapi", () => {
 		mockClient.get.mockImplementationOnce(() =>
 			Promise.resolve({
 				data: {
-					metadata: {
+					meta: {
 						pagination: {
 							page: 1,
 							pageCount: 1,
