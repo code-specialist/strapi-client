@@ -1,5 +1,5 @@
 
-[![All Contributors](https://img.shields.io/github/all-contributors/code-specialist/strapi-client?color=ee8449&style=flat-square)](#contributors) [![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml)
+[![All Contributors](https://img.shields.io/github/all-contributors/code-specialist/strapi-client?color=ee8449&style=flat-square)](#contributors) [![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml)[![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/strapi-client/badge)](https://www.codefactor.io/repository/github/code-specialist/strapi-client)
 
 ---
 # Introduction
