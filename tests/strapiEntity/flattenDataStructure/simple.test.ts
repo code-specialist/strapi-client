@@ -42,7 +42,7 @@ describe("StrapiEntity.unpackEntity", () => {
 		strapiEntity = new StrapiEntity<TestEntity>({
 			client: testClient,
 			path: "_",
-			childEntities: ["subEntity"]
+			childEntities: ["subEntity"],
 		});
 	});
 

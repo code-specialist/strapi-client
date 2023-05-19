@@ -133,8 +133,6 @@ const expectedOutput: TestEntity = {
 	},
 };
 
-
-
 describe("StrapiEntity.unpackEntity", () => {
 	let strapiEntity: StrapiEntity<TestEntity>;
 

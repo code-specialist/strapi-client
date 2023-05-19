@@ -36,6 +36,8 @@ describe("StrapiEntity", () => {
 			expect(client.get).toHaveBeenCalledWith("/test", {
 				params: {
 					populate: undefined,
+					"pagination[pageSize]": 25,
+					"pagination[page]": 1,
 					"filters[name]": "John",
 				},
 			});
@@ -51,6 +53,8 @@ describe("StrapiEntity", () => {
 			expect(client.get).toHaveBeenCalledWith("/test", {
 				params: {
 					populate: undefined,
+					"pagination[pageSize]": 25,
+					"pagination[page]": 1,
 					"filters[name]": "Nonexistent",
 				},
 			});
