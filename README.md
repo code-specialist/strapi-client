@@ -1,6 +1,8 @@
-## Intro 
 
 [![All Contributors](https://img.shields.io/github/all-contributors/code-specialist/strapi-client?color=ee8449&style=flat-square)](#contributors)
+
+[![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml)
+---
 
 The main purpose of this library is to streamline the integration of Strapi APIs into TypeScript projects. It provides a typed interface for interacting with Strapi entities and offers a client creation function that encapsulates the necessary configuration.
 
