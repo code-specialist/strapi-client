@@ -73,13 +73,13 @@ export class StrapiEntity<T> {
 			GenericStrapiData<GenericStrapiEntity<any>[]>
 		>(path ? path : this.path, {
 			params: {
-				...(populates ?? {}),
-				...(filters ?? {}),
+				...populates,
+				...filters,
 				"pagination[pageSize]": this.pageSize,
 				"pagination[page]": page,
 			},
 		});
-		if (response.data.metadata?.pagination?.pageCount > page) {
+		if (response.data?.metadata?.pagination?.pageCount > page) {
 			const additionalData = await this.queryStrapi({
 				path: path,
 				populates: populates,
@@ -103,25 +103,28 @@ export class StrapiEntity<T> {
 	}
 
 	public async getAll(): Promise<T[]> {
-		const response = await this.queryStrapi(this.getPopulates());
-		return this.flattenDataStructure(response.data);
+		const strapiObjects = await this.queryStrapi({populates: this.getPopulates()});
+		return this.flattenDataStructure(strapiObjects);
 	}
 
 	public async findOneBy({ fieldName, value }: IFilter): Promise<T> {
-		const data = await this.findAllBy({ fieldName, value });
-		return data[0];
+		const strapiObjects = await this.findAllBy({ fieldName, value });
+		return strapiObjects[0];
 	}
 
 	public async findAllBy({ fieldName, value }: IFilter): Promise<T[]> {
-		const data = await this.find(fieldName, value);
-		return this.flattenDataStructure(data);
+		const strapiObjects = await this.find(fieldName, value);
+		return this.flattenDataStructure(strapiObjects);
 	}
 
-	public async get({ id }: IID): Promise<T> {
-		const response = await this.queryStrapi({
+	public async get({ id }: IID): Promise<T | null> {
+		const strapiObject = await this.queryStrapi({
 			path: `${this.path}/${id}`,
 			populates: this.getPopulates(),
 		});
-		return this.flattenDataStructure(response.data);
+		if (!strapiObject) {
+			return null;
+		}
+		return this.flattenDataStructure(strapiObject);
 	}
 }
