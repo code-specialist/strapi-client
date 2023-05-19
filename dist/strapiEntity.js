@@ -57,25 +57,37 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrapiEntity = void 0;
 var StrapiEntity = /** @class */ (function () {
-    function StrapiEntity(strapiEntity) {
+    function StrapiEntity(strapiEntity, pageSize) {
         this.client = strapiEntity.client;
         this.path = strapiEntity.path;
         this.childEntities = strapiEntity.childEntities;
+        this.pageSize = pageSize !== null && pageSize !== void 0 ? pageSize : 25; // Defaults to 25
     }
     StrapiEntity.prototype.flattenDataStructure = function (data) {
         var _this = this;
         if (!data) {
             return null;
         }
+        // rome-ignore lint/suspicious/noPrototypeBuiltins:
         if (data.hasOwnProperty("data")) {
             data = data.data;
         }
         if (!data) {
             return null;
         }
+        // rome-ignore lint/suspicious/noPrototypeBuiltins:
         if (data.hasOwnProperty("attributes")) {
             var attributes = data.attributes, rest = __rest(data, ["attributes"]);
             data = __assign(__assign({}, rest), attributes);
@@ -99,18 +111,41 @@ var StrapiEntity = /** @class */ (function () {
         var _a;
         return _a = {}, _a["filters[".concat(fieldName, "]")] = value, _a;
     };
-    StrapiEntity.prototype.find = function (fieldName, value) {
+    StrapiEntity.prototype.queryStrapi = function (_a) {
+        var _b, _c;
+        var path = _a.path, populates = _a.populates, filters = _a.filters, _d = _a.page, page = _d === void 0 ? 1 : _d;
         return __awaiter(this, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.get(this.path, {
-                            params: __assign(__assign({}, this.getPopulates()), this.getFilter(fieldName, value)),
+            var response, additionalData;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0: return [4 /*yield*/, this.client.get(path ? path : this.path, {
+                            params: __assign(__assign(__assign({}, (populates !== null && populates !== void 0 ? populates : {})), (filters !== null && filters !== void 0 ? filters : {})), { "pagination[pageSize]": this.pageSize, "pagination[page]": page }),
                         })];
                     case 1:
-                        response = _a.sent();
+                        response = _e.sent();
+                        if (!(((_c = (_b = response.data.metadata) === null || _b === void 0 ? void 0 : _b.pagination) === null || _c === void 0 ? void 0 : _c.pageCount) > page)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.queryStrapi({
+                                path: path,
+                                populates: populates,
+                                filters: filters,
+                                page: page + 1,
+                            })];
+                    case 2:
+                        additionalData = _e.sent();
+                        response.data.data = __spreadArray(__spreadArray([], response.data.data, true), additionalData.data, true);
                         return [2 /*return*/, response.data];
+                    case 3: return [2 /*return*/, response.data];
                 }
+            });
+        });
+    };
+    StrapiEntity.prototype.find = function (fieldName, value) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.queryStrapi({
+                        populates: this.getPopulates(),
+                        filters: this.getFilter(fieldName, value),
+                    })];
             });
         });
     };
@@ -119,9 +154,7 @@ var StrapiEntity = /** @class */ (function () {
             var response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.get(this.path, {
-                            params: this.getPopulates(),
-                        })];
+                    case 0: return [4 /*yield*/, this.queryStrapi(this.getPopulates())];
                     case 1:
                         response = _a.sent();
                         return [2 /*return*/, this.flattenDataStructure(response.data)];
@@ -163,8 +196,9 @@ var StrapiEntity = /** @class */ (function () {
             var response;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.client.get("".concat(this.path, "/").concat(id), {
-                            params: this.getPopulates(),
+                    case 0: return [4 /*yield*/, this.queryStrapi({
+                            path: "".concat(this.path, "/").concat(id),
+                            populates: this.getPopulates(),
                         })];
                     case 1:
                         response = _b.sent();

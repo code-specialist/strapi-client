@@ -43,8 +43,16 @@ export interface GenericStrapiEntity<T> {
     id: number;
     attributes: T;
 }
-export interface GenericStrapiData<T> {
-    data: GenericStrapiEntity<T>;
+export interface GenericStrapiData<T> extends Object {
+    data: GenericStrapiEntity<T>[];
+    metadata: {
+        pagination: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        };
+    };
 }
 export interface IFilter {
     fieldName: string;
@@ -57,5 +65,11 @@ export interface IStrapiEntity {
     client: AxiosInstance;
     path: string;
     childEntities?: string[];
+}
+export interface IQueryStrapi {
+    path?: string;
+    populates?: object;
+    filters?: object;
+    page?: number;
 }
 export {};
