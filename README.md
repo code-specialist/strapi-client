@@ -4,20 +4,30 @@ TODO:
 - What does it do
 - What are the benefits
 - How does it do it
-- what are the limitations
+- what are the limitations (e.g. no support for data attribute)
 
 ## Installation
 
-1. Login to the private registry with your GitHub username and a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with the `read:packages` scope
-    ```sh
-    npm login --registry=https://npm.pkg.github.com
-    ```
+```sh
+npm install code-specialist-strapi-client
+```
 
-2. Install the package
-    ```sh
-    npm install @code-specialist/strapi-client
-    ```
+```sh
+pnpm add code-specialist-strapi-client
+```
 
+```sh
+yarn add code-specialist-strapi-client
+```
+
+## Feature Roadmap
+
+- [x] Fetching single entities
+- [x] Fetching multiple entities
+- [x] Fetching entities with relations
+- [x] Fetching entities with nested relations
+- [x] Pagination support 
+- [ ] Support attributes called `data` in entities
 
 ## Usage
 
@@ -37,14 +47,14 @@ TODO:
     You may find the `StrapiBaseImageType` useful for your interface if you want to use images in your entity.
 2. Create a client
     ```ts
-    import { createStrapiClient } from "@code-specialist/strapi-client";
+    import { createStrapiClient } from "code-specialist-strapi-client";
 
-    const client = createStrapiClient({baseUrl: "https://cs.code-specialist.con", apiKey: "YOUR_API_KEY"});
+    const client = createStrapiClient({baseUrl: "https://cs.code-specialist.com", apiKey: "YOUR_API_KEY"});
     ```   
 
 3. Create an instance of the `StrapiEntity` class
     ```ts
-    import { StrapiEntity } from "@code-specialist/strapi-client";
+    import { StrapiEntity } from "code-specialist-strapi-client";
     const postEntity = new StrapiEntity<IPost>({client: client, path: "posts", childEntities: ["image", "author", "author.image"]})
     ```
 
@@ -61,8 +71,3 @@ TODO:
 TODO:
 - Testing paradigms
 - How to run tests
-
-## Building & Publishing
-
-TODO:
-- Create Workflow
