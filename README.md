@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![All Contributors](https://img.shields.io/github/all-contributors/code-specialist/strapi-client?color=ee8449&style=flat-square)](#contributors) [![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml) [![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/strapi-client/badge)](https://www.codefactor.io/repository/github/code-specialist/strapi-client) [![codecov](https://codecov.io/github/code-specialist/strapi-client/branch/main/graph/badge.svg?token=4DY9OB2KR5)](https://codecov.io/github/code-specialist/strapi-client)
+[![CodeQL](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml/badge.svg)](https://github.com/code-specialist/strapi-client/actions/workflows/codeql.yml) [![CodeFactor](https://www.codefactor.io/repository/github/code-specialist/strapi-client/badge)](https://www.codefactor.io/repository/github/code-specialist/strapi-client) [![codecov](https://codecov.io/github/code-specialist/strapi-client/branch/main/graph/badge.svg?token=4DY9OB2KR5)](https://codecov.io/github/code-specialist/strapi-client)
 
 ---
 # Introduction
