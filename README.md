@@ -29,6 +29,9 @@ yarn add code-specialist-strapi-client
 - [x] Pagination support 
 - [ ] Support attributes called `data` in entities
 
+
+If you have any feature requests, please open an issue with the `enhancement` label or simply create a pull request.
+
 ## Usage
 
 1. Create an interface for your entity that extends the `StrapiBaseDataType` interface
@@ -65,6 +68,10 @@ yarn add code-specialist-strapi-client
     const posts: IPost[] = await postEntity.getAll();
     const post: IPost  = await postEntity.get({id: 1}); // ID
     ```
+
+## Contribution
+
+TODO: Add contribution guidelines "All contributions are welcome"
 
 ## Testing
 
