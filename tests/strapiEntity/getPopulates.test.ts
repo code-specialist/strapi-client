@@ -1,7 +1,6 @@
 import axios from "axios";
 import { StrapiEntity } from "../../lib/strapiEntity";
 
-
 describe("StrapiEntity", () => {
 	describe("getPopulates", () => {
 		it("should return an empty object if no child entities are defined", () => {
