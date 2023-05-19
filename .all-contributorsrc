@@ -18,6 +18,16 @@
       "contributions": [
         "code"
       ]
+    },
+    
+    {
+      "login": "yannicschroeer",
+      "name": "Yannic Schröer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22749683?v=4",
+      "profile": "https://code-specialist.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

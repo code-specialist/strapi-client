@@ -344,6 +344,7 @@ Represents the format of an image.
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JonasScholl"><img src="https://avatars.githubusercontent.com/u/43819845?v=4?s=50" width="50px;" alt="Jonas Scholl"/><br /><sub><b>Jonas Scholl</b></sub></a><br /><a href="https://github.com/code-specialist/strapi-client/code-specialist/strapi-client/commits?author=JonasScholl" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://code-specialist.com"><img src="https://avatars.githubusercontent.com/u/22749683?v=4?s=50" width="50px;" alt="Yannic Schröer"/><br /><sub><b>Yannic Schröer</b></sub></a><br /><a href="https://github.com/code-specialist/strapi-client/code-specialist/strapi-client/commits?author=yannicschroeer" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
@@ -356,13 +357,6 @@ Represents the format of an image.
     </tr>
   </tfoot>
 </table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
