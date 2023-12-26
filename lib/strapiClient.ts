@@ -9,7 +9,7 @@ interface ICreateStrapiClient {
 
 export function createStrapiClient({ baseUrl, apiKey, timeout, additionalConfig }: ICreateStrapiClient) {
 	// TODO: There are possible merge conflicts with the additionalConfig e.g. headers
-	const client = axios.create({
+	return axios.create({
 		baseURL: `${baseUrl}/api`,
 		timeout: timeout,
 		headers: {
@@ -17,6 +17,4 @@ export function createStrapiClient({ baseUrl, apiKey, timeout, additionalConfig 
 		},
 		...additionalConfig
 	})
-
-	return client
 }
