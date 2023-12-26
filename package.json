@@ -1,6 +1,6 @@
 {
 	"name": "code-specialist-strapi-client",
-	"version": "0.5.7",
+	"version": "0.6.0",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"engines": {
@@ -8,7 +8,9 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"test": "jest"
+		"test": "jest",
+		"format": "pnpm dlx @biomejs/biome format . --write",
+		"lint": "pnpm dlx @biomejs/biome lint ."
 	},
 	"dependencies": {
 		"@types/node": "~18.16.3",
@@ -16,10 +18,10 @@
 		"typescript": "~5.0.4"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "1.4.1",
 		"@types/jest": "~29.5.1",
 		"all-contributors-cli": "^6.25.1",
 		"jest": "~29.5.0",
-		"rome": "^12.1.2",
 		"ts-jest": "~29.1.0"
 	},
 	"jest": {
@@ -28,6 +30,9 @@
 		"bail": true,
 		"verbose": true,
 		"collectCoverage": true,
-		"collectCoverageFrom": ["lib/strapiClient.ts", "lib/strapiEntity.ts"]
+		"collectCoverageFrom": [
+			"lib/strapiClient.ts",
+			"lib/strapiEntity.ts"
+		]
 	}
 }

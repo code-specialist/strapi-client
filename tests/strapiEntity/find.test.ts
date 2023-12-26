@@ -45,6 +45,21 @@ describe("StrapiEntity", () => {
 			expect(result).toEqual(responseData);
 		});
 
+		it("should build a correct filter when multiple values are provided", async () => {
+			jest.spyOn(client, "get").mockResolvedValueOnce({ data: { data: [] } });
+			
+			await entity["find"](["name", "test"], "John");
+
+			expect(client.get).toHaveBeenCalledWith("/test", {
+				params: {
+					populate: undefined,
+					"pagination[pageSize]": 25,
+					"pagination[page]": 1,
+					"filters[name][test]": "John",
+				},
+			});
+		});
+
 		it("should return an empty array if no entities match the specified filter", async () => {
 			jest.spyOn(client, "get").mockResolvedValueOnce({ data: { data: [] } });
 
