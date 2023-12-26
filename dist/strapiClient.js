@@ -20,7 +20,7 @@ function createStrapiClient(_a) {
     var baseUrl = _a.baseUrl, apiKey = _a.apiKey, timeout = _a.timeout, additionalConfig = _a.additionalConfig;
     // TODO: There are possible merge conflicts with the additionalConfig e.g. headers
     return axios_1.default.create(__assign({ baseURL: "".concat(baseUrl, "/api"), timeout: timeout, headers: {
-            Authorization: "Bearer ".concat(apiKey),
+            Authorization: "Bearer ".concat(apiKey)
         } }, additionalConfig));
 }
 exports.createStrapiClient = createStrapiClient;

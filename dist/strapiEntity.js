@@ -80,16 +80,20 @@ var StrapiEntity = /** @class */ (function () {
         if (!data) {
             return null;
         }
-        // rome-ignore lint/suspicious/noPrototypeBuiltins:
-        if (data.hasOwnProperty("data")) {
+        // biome-ignore lint/suspicious/noPrototypeBuiltins: Necessary.
+        if (data.hasOwnProperty('data')) {
+            // biome-ignore lint/style/noParameterAssign: Necessary.
             data = data.data;
         }
         if (!data) {
             return null;
         }
-        // rome-ignore lint/suspicious/noPrototypeBuiltins:
-        if (data.hasOwnProperty("attributes")) {
-            var attributes = data.attributes, rest = __rest(data, ["attributes"]);
+        // biome-ignore lint/suspicious/noPrototypeBuiltins: Necessary
+        if (data.hasOwnProperty('attributes')) {
+            var attributes = data.attributes, rest = __rest(data
+            // biome-ignore lint/style/noParameterAssign: Necessary.
+            , ["attributes"]);
+            // biome-ignore lint/style/noParameterAssign: Necessary.
             data = __assign(__assign({}, rest), attributes);
         }
         for (var key in data) {
@@ -98,18 +102,20 @@ var StrapiEntity = /** @class */ (function () {
                     return _this.flattenDataStructure(item);
                 });
             }
-            else if (typeof data[key] === "object") {
+            else if (typeof data[key] === 'object') {
                 data[key] = this.flattenDataStructure(data[key]);
             }
         }
         return data;
     };
     StrapiEntity.prototype.getPopulates = function () {
-        return this.childEntities ? { populate: this.childEntities.join(",") } : {};
+        return this.childEntities ? { populate: this.childEntities.join(',') } : {};
     };
-    StrapiEntity.prototype.getFilter = function (fieldName, value) {
+    StrapiEntity.prototype.getFilter = function (fieldPath, value) {
         var _a;
-        return _a = {}, _a["filters[".concat(fieldName, "]")] = value, _a;
+        var isNested = Array.isArray(fieldPath);
+        var constructedfieldPath = isNested ? fieldPath.map(function (key) { return "[".concat(key, "]"); }).join("") : "[".concat(fieldPath, "]");
+        return _a = {}, _a["filters".concat(constructedfieldPath)] = value, _a;
     };
     StrapiEntity.prototype.queryStrapi = function (_a) {
         var _b, _c, _d;
@@ -119,7 +125,7 @@ var StrapiEntity = /** @class */ (function () {
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0: return [4 /*yield*/, this.client.get(path ? path : this.path, {
-                            params: __assign(__assign(__assign({}, populates), filters), { "pagination[pageSize]": this.pageSize, "pagination[page]": page }),
+                            params: __assign(__assign(__assign({}, populates), filters), { 'pagination[pageSize]': this.pageSize, 'pagination[page]': page })
                         })];
                     case 1:
                         response = _f.sent();
@@ -128,7 +134,7 @@ var StrapiEntity = /** @class */ (function () {
                                 path: path,
                                 populates: populates,
                                 filters: filters,
-                                page: page + 1,
+                                page: page + 1
                             })];
                     case 2:
                         additionalData = _f.sent();
@@ -139,12 +145,12 @@ var StrapiEntity = /** @class */ (function () {
             });
         });
     };
-    StrapiEntity.prototype.find = function (fieldName, value) {
+    StrapiEntity.prototype.find = function (fieldPath, value) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this.queryStrapi({
                         populates: this.getPopulates(),
-                        filters: this.getFilter(fieldName, value),
+                        filters: this.getFilter(fieldPath, value)
                     })];
             });
         });
@@ -163,12 +169,12 @@ var StrapiEntity = /** @class */ (function () {
         });
     };
     StrapiEntity.prototype.findOneBy = function (_a) {
-        var fieldName = _a.fieldName, value = _a.value;
+        var fieldPath = _a.fieldPath, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
             var strapiObjects;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.findAllBy({ fieldName: fieldName, value: value })];
+                    case 0: return [4 /*yield*/, this.findAllBy({ fieldPath: fieldPath, value: value })];
                     case 1:
                         strapiObjects = _b.sent();
                         return [2 /*return*/, strapiObjects[0]];
@@ -177,12 +183,12 @@ var StrapiEntity = /** @class */ (function () {
         });
     };
     StrapiEntity.prototype.findAllBy = function (_a) {
-        var fieldName = _a.fieldName, value = _a.value;
+        var fieldPath = _a.fieldPath, value = _a.value;
         return __awaiter(this, void 0, void 0, function () {
             var strapiObjects;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.find(fieldName, value)];
+                    case 0: return [4 /*yield*/, this.find(fieldPath, value)];
                     case 1:
                         strapiObjects = _b.sent();
                         return [2 /*return*/, this.flattenDataStructure(strapiObjects)];
@@ -198,7 +204,7 @@ var StrapiEntity = /** @class */ (function () {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, this.queryStrapi({
                             path: "".concat(this.path, "/").concat(id),
-                            populates: this.getPopulates(),
+                            populates: this.getPopulates()
                         })];
                     case 1:
                         strapiObject = _b.sent();

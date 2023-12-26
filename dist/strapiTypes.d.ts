@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance } from 'axios';
 export interface StrapiBaseDataType {
     id: number;
     createdAt: Date;
@@ -55,7 +55,7 @@ export interface GenericStrapiData<T> extends Object {
     };
 }
 export interface IFilter {
-    fieldName: string;
+    fieldPath: string | string[];
     value: string;
 }
 export interface IID {
