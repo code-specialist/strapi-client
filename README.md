@@ -101,8 +101,8 @@ If you have any feature requests, please open an issue with the `enhancement` la
 
 4. Use the instance to fetch data from Strapi
     ```ts
-    const post: IPost = await postEntity.find({fieldName: "slug", value: "dry"}); // Should be a unique field. However always the first result is returned
-    const posts: IPost[] = await postEntity.findAll({fieldName: "category", value: "python")};
+    const post: IPost = await postEntity.find({fieldPath: "slug", value: "dry"}); // Should be a unique field. However always the first result is returned
+    const posts: IPost[] = await postEntity.findAll({fieldPath: "category", value: "python")};
     const posts: IPost[] = await postEntity.getAll();
     const post: IPost  = await postEntity.get({id: 1}); // ID
     ```
@@ -195,19 +195,19 @@ Retrieves all entities of the configured type from the Strapi API.
 
 - Returns: A promise that resolves to an array of entities of type `T`.
 
-##### `findOneBy({ fieldName, value }: IFilter): Promise<T>`
+##### `findOneBy({ fieldPath, value }: IFilter): Promise<T>`
 
 Retrieves the first entity that matches the specified filter criteria from the Strapi API.
 
-- `fieldName` (string): The name of the field to filter on.
+- `fieldPath` (string): The name of the field to filter on.
 - `value` (string): The value to filter by.
 - Returns: A promise that resolves to the first entity of type `T` that matches the filter criteria.
 
-##### `findAllBy({ fieldName, value }: IFilter): Promise<T[]>`
+##### `findAllBy({ fieldPath, value }: IFilter): Promise<T[]>`
 
 Retrieves all entities that match the specified filter criteria from the Strapi API.
 
-- `fieldName` (string): The name of the field to filter on.
+- `fieldPath` (string): The name of the field to filter on.
 - `value` (string): The value to filter by.
 - Returns: A promise that resolves to an array of entities of type `T` that match the filter criteria.
 
@@ -233,11 +233,11 @@ Builds the `populates` object used in the API request URL to include child entit
 
 - Returns: An object representing the populated child entities.
 
-##### `getFilter(fieldName: string, value: string): object`
+##### `getFilter(fieldPath: string, value: string): object`
 
 Builds the filter object used in the API request URL to filter entities by a specific field and value.
 
-- `fieldName` (string): The name of the field to filter on.
+- `fieldPath` (string): The name of the field to filter on.
 - `value` (string): The value to filter by.
 - Returns: An object representing the filter criteria.
 
@@ -306,7 +306,7 @@ Represents generic Strapi data.
 
 Represents a filter for querying entities.
 
-- `fieldName` (string): The name of the field to filter on.
+- `fieldPath` (string | string[]): The name or path of the field to filter on. E.g. `"name"` or `["author" "name"]`.
 - `value` (string): The value to filter by.
 
 #### `IID`
