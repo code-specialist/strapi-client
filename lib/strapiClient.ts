@@ -1,25 +1,22 @@
-import axios, { CreateAxiosDefaults } from "axios";
+import axios, { CreateAxiosDefaults } from 'axios'
 
 interface ICreateStrapiClient {
-	baseUrl: string;
-	apiKey: string;
-	timeout?: number;
-	additionalConfig?: CreateAxiosDefaults<any>;
+	baseUrl: string
+	apiKey: string
+	timeout?: number
+	additionalConfig?: CreateAxiosDefaults<any>
 }
 
-export function createStrapiClient({
-	baseUrl,
-	apiKey,
-	timeout,
-	additionalConfig,
-}: ICreateStrapiClient) {
+export function createStrapiClient({ baseUrl, apiKey, timeout, additionalConfig }: ICreateStrapiClient) {
 	// TODO: There are possible merge conflicts with the additionalConfig e.g. headers
-	return axios.create({
+	const client = axios.create({
 		baseURL: `${baseUrl}/api`,
 		timeout: timeout,
 		headers: {
-			Authorization: `Bearer ${apiKey}`,
+			Authorization: `Bearer ${apiKey}`
 		},
-		...additionalConfig,
-	});
+		...additionalConfig
+	})
+
+	return client
 }

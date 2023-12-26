@@ -33,7 +33,7 @@ describe("findOneBy", () => {
 			}),
 		);
 
-		const result = await entity.findOneBy({ fieldName: "id", value: "1" });
+		const result = await entity.findOneBy({ fieldPath: "id", value: "1" });
 
 		expect(mockClient.get).toHaveBeenCalledTimes(1); // Only one request made
 		expect(mockClient.get).toHaveBeenCalledWith("/test", {

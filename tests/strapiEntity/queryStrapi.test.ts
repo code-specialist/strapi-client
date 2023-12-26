@@ -31,6 +31,7 @@ describe("queryStrapi", () => {
 			}),
 		);
 
+
 		await entity["queryStrapi"]({});
 
 		expect(mockClient.get).toHaveBeenCalledWith("/test", {
