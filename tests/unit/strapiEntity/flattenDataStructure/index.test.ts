@@ -1,5 +1,5 @@
-import { StrapiEntity } from "../../../lib/strapiEntity";
-import { IStrapiEntity } from "../../../lib/strapiTypes";
+import { StrapiEntity } from "../../../../lib/strapiEntity";
+import { IStrapiEntity } from "../../../../lib/strapiTypes";
 
 describe("flattenDataStructure", () => {
 	it("returns null for null input", () => {

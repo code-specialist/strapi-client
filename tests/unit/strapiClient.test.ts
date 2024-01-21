@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createStrapiClient } from "../lib/strapiClient";
+import { createStrapiClient } from "../../lib/strapiClient";
 
 describe("createStrapiClient", () => {
 	const baseUrl = "https://example.com";

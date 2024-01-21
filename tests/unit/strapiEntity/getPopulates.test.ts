@@ -1,5 +1,5 @@
 import axios from "axios";
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 
 describe("StrapiEntity", () => {
 	describe("getPopulates", () => {

@@ -1,4 +1,4 @@
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 
 // Mock AxiosInstance and response data for testing
 const mockClient = {
@@ -41,6 +41,7 @@ describe("findOneBy", () => {
 				"filters[id]": "1",
 				"pagination[pageSize]": 25,
 				"pagination[page]": 1,
+				publicationState: "live"
 			},
 		});
 

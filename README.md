@@ -10,9 +10,11 @@
 # Introduction
 
 The main purpose of this library is to streamline the integration of Strapi APIs into TypeScript projects. It provides a typed interface for interacting with Strapi entities and
-offers a client creation function that encapsulates the necessary configuration.
+offers a client creation function that encapsulates the necessary configuration. 
 
-**This library is compatible only with Strapi v4**.
+In our opinion a client library should abstract framework specific details and provide a very simple and standartized interface for interacting with the API. This library is designed to do exactly that.
+
+**This library is compatible only with Strapi v4+**.
 
 ## Functionality
 
@@ -20,6 +22,7 @@ The library enables you to perform the following tasks:
 
 - Query and retrieve data from Strapi entities
 - Filter data based on specified criteria
+- Retrieve published and draft entities
 - Paginate through data sets
 - Retrieve single entities by ID or find entities based on specific attributes
 
@@ -64,6 +67,7 @@ yarn add code-specialist-strapi-client
 - [x] Fetching entities with relations
 - [x] Fetching entities with nested relations
 - [x] Pagination support 
+- [x] Optional draft retrival
 - [ ] Error handling and retry logic
 - [ ] Support attributes called `data` in entities
 
@@ -186,6 +190,7 @@ Creates an instance of the `StrapiEntity` class.
   - `path` (string): The base path of the entity in the Strapi API.
   - `childEntities` (optional string[]): An array of child entity names to include in the query.
 - `pageSize` (optional number): The page size to use for paginated queries. Defaults to 25 if not specified.
+- `fetchPreviews` (optional boolean): Whether to also fetch draft entities (Not published). Defaults to false if not specified.
 
 #### Methods
 
@@ -349,6 +354,11 @@ Represents the format of an image.
 - `size` (number): The size of the image file in bytes.
 - `width` (number): The width of the image.
 - `height` (number): The height of the image.
+
+## Contributions
+
+We're always looking for ways to improve this library and make it more useful for developers. If you have any ideas, suggestions, or feedback, please feel free to open an issue or pull request.  
+
 
 ## Contributors
 

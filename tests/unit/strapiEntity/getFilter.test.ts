@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 
 describe("StrapiEntity", () => {
 	let client: AxiosInstance;

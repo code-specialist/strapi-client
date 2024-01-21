@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 
 describe("StrapiEntity", () => {
 	let client: AxiosInstance;
@@ -39,6 +39,7 @@ describe("StrapiEntity", () => {
 					"pagination[pageSize]": 25,
 					"pagination[page]": 1,
 					"filters[name]": "John",
+					publicationState: "live"
 				},
 			});
 
@@ -47,7 +48,7 @@ describe("StrapiEntity", () => {
 
 		it("should build a correct filter when multiple values are provided", async () => {
 			jest.spyOn(client, "get").mockResolvedValueOnce({ data: { data: [] } });
-			
+
 			await entity["find"](["name", "test"], "John");
 
 			expect(client.get).toHaveBeenCalledWith("/test", {
@@ -56,6 +57,7 @@ describe("StrapiEntity", () => {
 					"pagination[pageSize]": 25,
 					"pagination[page]": 1,
 					"filters[name][test]": "John",
+					publicationState: "live"
 				},
 			});
 		});
@@ -71,6 +73,7 @@ describe("StrapiEntity", () => {
 					"pagination[pageSize]": 25,
 					"pagination[page]": 1,
 					"filters[name]": "Nonexistent",
+					publicationState: "live"
 				},
 			});
 

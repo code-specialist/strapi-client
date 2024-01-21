@@ -1,4 +1,4 @@
-import { StrapiEntity } from "../../lib/strapiEntity";
+import { StrapiEntity } from "../../../lib/strapiEntity";
 
 // Mock AxiosInstance and response data for testing
 const mockClient = {
@@ -33,6 +33,8 @@ describe("get", () => {
 				populate: undefined,
 				"pagination[pageSize]": 25,
 				"pagination[page]": 1,
+
+				publicationState: "live"
 			},
 		});
 
@@ -92,7 +94,11 @@ describe("get", () => {
 
 		expect(mockClient.get).toHaveBeenCalledTimes(1); // Only one request made
 		expect(mockClient.get).toHaveBeenCalledWith("/test/1", {
-			params: { "pagination[pageSize]": 25, "pagination[page]": 1 },
+			params: {
+				"pagination[pageSize]": 25,
+				"pagination[page]": 1,
+				publicationState: "live"
+			},
 		});
 
 		expect(result).toBeNull();

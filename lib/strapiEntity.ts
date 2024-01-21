@@ -1,17 +1,24 @@
 import { AxiosInstance } from 'axios'
 import { GenericStrapiData, GenericStrapiEntity, IFilter, IID, IQueryStrapi, IStrapiEntity } from './strapiTypes'
 
+export interface StrapiEntitySettings {
+    pageSize?: number
+    fetchPreviews?: boolean
+}
+
 export class StrapiEntity<T> {
     private readonly client: AxiosInstance
     private readonly path: string
     private readonly childEntities?: string[]
     private readonly pageSize
+    private readonly fetchPreviews: boolean
 
-    constructor(strapiEntity: IStrapiEntity, pageSize?: number) {
+    constructor(strapiEntity: IStrapiEntity, settings?: StrapiEntitySettings) {
         this.client = strapiEntity.client
         this.path = strapiEntity.path
         this.childEntities = strapiEntity.childEntities
-        this.pageSize = pageSize ?? 25 // Defaults to 25
+        this.pageSize = settings?.pageSize ?? 25
+        this.fetchPreviews = settings?.fetchPreviews ?? false
     }
 
     private flattenDataStructure(data: any) {
@@ -55,7 +62,7 @@ export class StrapiEntity<T> {
 
     private getFilter(fieldPath: string | string[], value: string): object {
         const isNested = Array.isArray(fieldPath)
-        const constructedfieldPath = isNested ? fieldPath.map(key => `[${key}]`).join("") : `[${fieldPath}]`
+        const constructedfieldPath = isNested ? fieldPath.map(key => `[${key}]`).join('') : `[${fieldPath}]`
         return { [`filters${constructedfieldPath}`]: value }
     }
 
@@ -66,7 +73,8 @@ export class StrapiEntity<T> {
                 ...populates,
                 ...filters,
                 'pagination[pageSize]': this.pageSize,
-                'pagination[page]': page
+                'pagination[page]': page,
+                publicationState: this.fetchPreviews ? 'preview' : 'live'
             }
         })
         if (response.data?.meta?.pagination?.pageCount > page) {
