@@ -69,11 +69,13 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StrapiEntity = void 0;
 var StrapiEntity = /** @class */ (function () {
-    function StrapiEntity(strapiEntity, pageSize) {
+    function StrapiEntity(strapiEntity, settings) {
+        var _a, _b;
         this.client = strapiEntity.client;
         this.path = strapiEntity.path;
         this.childEntities = strapiEntity.childEntities;
-        this.pageSize = pageSize !== null && pageSize !== void 0 ? pageSize : 25; // Defaults to 25
+        this.pageSize = (_a = settings === null || settings === void 0 ? void 0 : settings.pageSize) !== null && _a !== void 0 ? _a : 25;
+        this.fetchPreviews = (_b = settings === null || settings === void 0 ? void 0 : settings.fetchPreviews) !== null && _b !== void 0 ? _b : false;
     }
     StrapiEntity.prototype.flattenDataStructure = function (data) {
         var _this = this;
@@ -114,7 +116,7 @@ var StrapiEntity = /** @class */ (function () {
     StrapiEntity.prototype.getFilter = function (fieldPath, value) {
         var _a;
         var isNested = Array.isArray(fieldPath);
-        var constructedfieldPath = isNested ? fieldPath.map(function (key) { return "[".concat(key, "]"); }).join("") : "[".concat(fieldPath, "]");
+        var constructedfieldPath = isNested ? fieldPath.map(function (key) { return "[".concat(key, "]"); }).join('') : "[".concat(fieldPath, "]");
         return _a = {}, _a["filters".concat(constructedfieldPath)] = value, _a;
     };
     StrapiEntity.prototype.queryStrapi = function (_a) {
@@ -125,7 +127,7 @@ var StrapiEntity = /** @class */ (function () {
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0: return [4 /*yield*/, this.client.get(path ? path : this.path, {
-                            params: __assign(__assign(__assign({}, populates), filters), { 'pagination[pageSize]': this.pageSize, 'pagination[page]': page })
+                            params: __assign(__assign(__assign({}, populates), filters), { 'pagination[pageSize]': this.pageSize, 'pagination[page]': page, publicationState: this.fetchPreviews ? 'preview' : 'live' })
                         })];
                     case 1:
                         response = _f.sent();
